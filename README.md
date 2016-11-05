@@ -1,6 +1,6 @@
 # Miro's Hammerspoon config
 
-Other configurations and projects (e.g. [Spectacle](https://www.spectacleapp.com/)) move windows in halves using arrows, and in corners using other counterintuitive shortcuts, like letters. With this configuration you will be able to move the window in halves and in corners using only arrows. You would also be able to resize them by thirds, quarters, or halves.
+Other Hammerspoon configurations and projects (e.g. [Spectacle](https://www.spectacleapp.com/)) move windows in halves using arrows, and in corners using other counterintuitive shortcuts, like letters. With this configuration you will be able to move the window in halves and in corners using only arrows. You would also be able to resize them by thirds, quarters, or halves.
 
 ![example](https://github.com/miromannino/hammerspoon-config/raw/imgs/example.gif)
 
