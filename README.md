@@ -48,7 +48,7 @@ As the other shortcuts, `hyper` + `f` can be pressed multiple times to obtain a 
 
 ## Reviews
 
-Here reviews, or comments from the users, just as reviews.
+Here comments from the users, just as reviews.
 
 > it's something I have been looking for all my life! It is really intuitive and ingenious once you see the magic it can do.
 > 
