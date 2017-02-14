@@ -54,6 +54,11 @@ Here comments from the users, just as reviews.
 > 
 > &mdash; [rxng](https://github.com/miromannino/hammerspoon-config/issues/1)
 
+Articles:
+
+A suggested tutorial in Sumnermic: https://www.sumnermic.com/blog/how-to-organise-window-viewing-areas-in-mac-os/
+
+
 ## License (MIT)
 
 Copyright (c) 2016 Miro Mannino
