@@ -56,7 +56,7 @@ Here comments from the users, just as reviews.
 
 ## Articles
 
-A suggested tutorial in Sumnermic: https://www.sumnermic.com/blog/how-to-organise-window-viewing-areas-in-mac-os/
+A suggested tutorial on Mic Sumner: https://www.micsumner.com/how-to-organise-window-viewing-areas-in-mac-os/
 
 
 ## License (MIT)
