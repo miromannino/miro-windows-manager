@@ -54,6 +54,10 @@ Here comments from the users, just as reviews.
 > 
 > &mdash; [rxng](https://github.com/miromannino/hammerspoon-config/issues/1)
 
+> Really loving the arrow based positioning, thanks for making this ! I can now uninstall “spectacle” which I was using for the same purpose but the key bindings were unintuitive.
+>
+> &mdash; Gaurav
+
 ## Articles
 
 A suggested tutorial on Mic Sumner: https://www.micsumner.com/how-to-organise-window-viewing-areas-in-mac-os/
