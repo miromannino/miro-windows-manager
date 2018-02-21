@@ -11,16 +11,16 @@
     ],
     "Variable" : [
       {
-        "parameters" : [
-
-        ],
+        "doc" : "The sizes that the window can have. \nThe sizes are expressed as dividend of the entire screen's size.\nFor example `{2, 3, 3\/2}` means that it can be 1\/2, 1\/3 and 2\/3 of the total screen's size",
+        "name" : "sizes",
         "stripped_doc" : [
           "The sizes that the window can have. ",
           "The sizes are expressed as dividend of the entire screen's size.",
           "For example `{2, 3, 3\/2}` means that it can be 1\/2, 1\/3 and 2\/3 of the total screen's size"
         ],
-        "desc" : "The sizes that the window can have.",
-        "doc" : "The sizes that the window can have. \nThe sizes are expressed as dividend of the entire screen's size.\nFor example `{2, 3, 3\/2}` means that it can be 1\/2, 1\/3 and 2\/3 of the total screen's size",
+        "parameters" : [
+
+        ],
         "notes" : [
 
         ],
@@ -30,19 +30,19 @@
 
         ],
         "def" : "MiroWindowsManager.sizes",
-        "name" : "sizes"
+        "desc" : "The sizes that the window can have."
       },
       {
-        "parameters" : [
-
-        ],
+        "doc" : "The sizes that the window can have in full-screen. \nThe sizes are expressed as dividend of the entire screen's size.\nFor example `{1, 4\/3, 2}` means that it can be 1\/1 (hence full screen), 3\/4 and 1\/2 of the total screen's size",
+        "name" : "fullScreenSizes",
         "stripped_doc" : [
           "The sizes that the window can have in full-screen. ",
           "The sizes are expressed as dividend of the entire screen's size.",
           "For example `{1, 4\/3, 2}` means that it can be 1\/1 (hence full screen), 3\/4 and 1\/2 of the total screen's size"
         ],
-        "desc" : "The sizes that the window can have in full-screen.",
-        "doc" : "The sizes that the window can have in full-screen. \nThe sizes are expressed as dividend of the entire screen's size.\nFor example `{1, 4\/3, 2}` means that it can be 1\/1 (hence full screen), 3\/4 and 1\/2 of the total screen's size",
+        "parameters" : [
+
+        ],
         "notes" : [
 
         ],
@@ -52,18 +52,18 @@
 
         ],
         "def" : "MiroWindowsManager.fullScreenSizes",
-        "name" : "fullScreenSizes"
+        "desc" : "The sizes that the window can have in full-screen."
       },
       {
-        "parameters" : [
-
-        ],
+        "doc" : "The screen's size using `hs.grid.setGrid()`\nThis parameter is used at the spoon's `:init()`",
+        "name" : "GRID",
         "stripped_doc" : [
           "The screen's size using `hs.grid.setGrid()`",
           "This parameter is used at the spoon's `:init()`"
         ],
-        "desc" : "The screen's size using `hs.grid.setGrid()`",
-        "doc" : "The screen's size using `hs.grid.setGrid()`\nThis parameter is used at the spoon's `:init()`",
+        "parameters" : [
+
+        ],
         "notes" : [
 
         ],
@@ -73,25 +73,28 @@
 
         ],
         "def" : "MiroWindowsManager.GRID",
-        "name" : "GRID"
+        "desc" : "The screen's size using `hs.grid.setGrid()`"
       }
     ],
     "stripped_doc" : [
 
     ],
     "desc" : "With this script you will be able to move the window in halves and in corners using your keyboard and mainly using arrows. You would also be able to resize them by thirds, quarters, or halves.",
+    "type" : "Module",
     "Deprecated" : [
 
     ],
-    "type" : "Module",
     "Constructor" : [
 
     ],
-    "Field" : [
-
-    ],
+    "doc" : "With this script you will be able to move the window in halves and in corners using your keyboard and mainly using arrows. You would also be able to resize them by thirds, quarters, or halves.\n\nOfficial homepage for more info and documentation: [https:\/\/github.com\/miromannino\/miro-windows-manager](https:\/\/github.com\/miromannino\/miro-windows-manager)\n\nDownload: [https:\/\/github.com\/miromannino\/miro-windows-manager\/raw\/master\/MiroWindowsManager.spoon.zip](https:\/\/github.com\/miromannino\/miro-windows-manager\/raw\/master\/MiroWindowsManager.spoon.zip)",
     "Method" : [
       {
+        "doc" : "Binds hotkeys for Miro's Windows Manager\nParameters:\n * mapping - A table containing hotkey details for the following items:\n  * up: for the up action (usually {hyper, \"up\"})\n  * right: for the right action (usually {hyper, \"right\"})\n  * down: for the down action (usually {hyper, \"down\"})\n  * left: for the left action (usually {hyper, \"left\"})\n  * fullscreen: for the full-screen action (e.g. {hyper, \"f\"})\n\nA configuration example can be:\n```\nlocal hyper = {\"ctrl\", \"alt\", \"cmd\"}\nspoon.MiroWindowsManager:bindHotkeys({\n  up = {hyper, \"up\"},\n  right = {hyper, \"right\"},\n  down = {hyper, \"down\"},\n  left = {hyper, \"left\"},\n  fullscreen = {hyper, \"f\"}\n})\n```",
+        "name" : "bindHotkeys",
+        "stripped_doc" : [
+          "Binds hotkeys for Miro's Windows Manager"
+        ],
         "parameters" : [
           " * mapping - A table containing hotkey details for the following items:",
           "  * up: for the up action (usually {hyper, \"up\"})",
@@ -112,11 +115,6 @@
           "})",
           "```"
         ],
-        "stripped_doc" : [
-          "Binds hotkeys for Miro's Windows Manager"
-        ],
-        "desc" : "Binds hotkeys for Miro's Windows Manager",
-        "doc" : "Binds hotkeys for Miro's Windows Manager\nParameters:\n * mapping - A table containing hotkey details for the following items:\n  * up: for the up action (usually {hyper, \"up\"})\n  * right: for the right action (usually {hyper, \"right\"})\n  * down: for the down action (usually {hyper, \"down\"})\n  * left: for the left action (usually {hyper, \"left\"})\n  * fullscreen: for the full-screen action (e.g. {hyper, \"f\"})\n\nA configuration example can be:\n```\nlocal hyper = {\"ctrl\", \"alt\", \"cmd\"}\nspoon.MiroWindowsManager:bindHotkeys({\n  up = {hyper, \"up\"},\n  right = {hyper, \"right\"},\n  down = {hyper, \"down\"},\n  left = {hyper, \"left\"},\n  fullscreen = {hyper, \"f\"}\n})\n```",
         "notes" : [
 
         ],
@@ -126,7 +124,7 @@
 
         ],
         "def" : "MiroWindowsManager:bindHotkeys()",
-        "name" : "bindHotkeys"
+        "desc" : "Binds hotkeys for Miro's Windows Manager"
       }
     ],
     "Command" : [
@@ -134,15 +132,15 @@
     ],
     "items" : [
       {
-        "parameters" : [
-
-        ],
+        "doc" : "The screen's size using `hs.grid.setGrid()`\nThis parameter is used at the spoon's `:init()`",
+        "name" : "GRID",
         "stripped_doc" : [
           "The screen's size using `hs.grid.setGrid()`",
           "This parameter is used at the spoon's `:init()`"
         ],
-        "desc" : "The screen's size using `hs.grid.setGrid()`",
-        "doc" : "The screen's size using `hs.grid.setGrid()`\nThis parameter is used at the spoon's `:init()`",
+        "parameters" : [
+
+        ],
         "notes" : [
 
         ],
@@ -152,19 +150,19 @@
 
         ],
         "def" : "MiroWindowsManager.GRID",
-        "name" : "GRID"
+        "desc" : "The screen's size using `hs.grid.setGrid()`"
       },
       {
-        "parameters" : [
-
-        ],
+        "doc" : "The sizes that the window can have in full-screen. \nThe sizes are expressed as dividend of the entire screen's size.\nFor example `{1, 4\/3, 2}` means that it can be 1\/1 (hence full screen), 3\/4 and 1\/2 of the total screen's size",
+        "name" : "fullScreenSizes",
         "stripped_doc" : [
           "The sizes that the window can have in full-screen. ",
           "The sizes are expressed as dividend of the entire screen's size.",
           "For example `{1, 4\/3, 2}` means that it can be 1\/1 (hence full screen), 3\/4 and 1\/2 of the total screen's size"
         ],
-        "desc" : "The sizes that the window can have in full-screen.",
-        "doc" : "The sizes that the window can have in full-screen. \nThe sizes are expressed as dividend of the entire screen's size.\nFor example `{1, 4\/3, 2}` means that it can be 1\/1 (hence full screen), 3\/4 and 1\/2 of the total screen's size",
+        "parameters" : [
+
+        ],
         "notes" : [
 
         ],
@@ -174,19 +172,19 @@
 
         ],
         "def" : "MiroWindowsManager.fullScreenSizes",
-        "name" : "fullScreenSizes"
+        "desc" : "The sizes that the window can have in full-screen."
       },
       {
-        "parameters" : [
-
-        ],
+        "doc" : "The sizes that the window can have. \nThe sizes are expressed as dividend of the entire screen's size.\nFor example `{2, 3, 3\/2}` means that it can be 1\/2, 1\/3 and 2\/3 of the total screen's size",
+        "name" : "sizes",
         "stripped_doc" : [
           "The sizes that the window can have. ",
           "The sizes are expressed as dividend of the entire screen's size.",
           "For example `{2, 3, 3\/2}` means that it can be 1\/2, 1\/3 and 2\/3 of the total screen's size"
         ],
-        "desc" : "The sizes that the window can have.",
-        "doc" : "The sizes that the window can have. \nThe sizes are expressed as dividend of the entire screen's size.\nFor example `{2, 3, 3\/2}` means that it can be 1\/2, 1\/3 and 2\/3 of the total screen's size",
+        "parameters" : [
+
+        ],
         "notes" : [
 
         ],
@@ -196,9 +194,14 @@
 
         ],
         "def" : "MiroWindowsManager.sizes",
-        "name" : "sizes"
+        "desc" : "The sizes that the window can have."
       },
       {
+        "doc" : "Binds hotkeys for Miro's Windows Manager\nParameters:\n * mapping - A table containing hotkey details for the following items:\n  * up: for the up action (usually {hyper, \"up\"})\n  * right: for the right action (usually {hyper, \"right\"})\n  * down: for the down action (usually {hyper, \"down\"})\n  * left: for the left action (usually {hyper, \"left\"})\n  * fullscreen: for the full-screen action (e.g. {hyper, \"f\"})\n\nA configuration example can be:\n```\nlocal hyper = {\"ctrl\", \"alt\", \"cmd\"}\nspoon.MiroWindowsManager:bindHotkeys({\n  up = {hyper, \"up\"},\n  right = {hyper, \"right\"},\n  down = {hyper, \"down\"},\n  left = {hyper, \"left\"},\n  fullscreen = {hyper, \"f\"}\n})\n```",
+        "name" : "bindHotkeys",
+        "stripped_doc" : [
+          "Binds hotkeys for Miro's Windows Manager"
+        ],
         "parameters" : [
           " * mapping - A table containing hotkey details for the following items:",
           "  * up: for the up action (usually {hyper, \"up\"})",
@@ -219,11 +222,6 @@
           "})",
           "```"
         ],
-        "stripped_doc" : [
-          "Binds hotkeys for Miro's Windows Manager"
-        ],
-        "desc" : "Binds hotkeys for Miro's Windows Manager",
-        "doc" : "Binds hotkeys for Miro's Windows Manager\nParameters:\n * mapping - A table containing hotkey details for the following items:\n  * up: for the up action (usually {hyper, \"up\"})\n  * right: for the right action (usually {hyper, \"right\"})\n  * down: for the down action (usually {hyper, \"down\"})\n  * left: for the left action (usually {hyper, \"left\"})\n  * fullscreen: for the full-screen action (e.g. {hyper, \"f\"})\n\nA configuration example can be:\n```\nlocal hyper = {\"ctrl\", \"alt\", \"cmd\"}\nspoon.MiroWindowsManager:bindHotkeys({\n  up = {hyper, \"up\"},\n  right = {hyper, \"right\"},\n  down = {hyper, \"down\"},\n  left = {hyper, \"left\"},\n  fullscreen = {hyper, \"f\"}\n})\n```",
         "notes" : [
 
         ],
@@ -233,10 +231,12 @@
 
         ],
         "def" : "MiroWindowsManager:bindHotkeys()",
-        "name" : "bindHotkeys"
+        "desc" : "Binds hotkeys for Miro's Windows Manager"
       }
     ],
-    "doc" : "With this script you will be able to move the window in halves and in corners using your keyboard and mainly using arrows. You would also be able to resize them by thirds, quarters, or halves.\n\nOfficial homepage for more info and documentation: [https:\/\/github.com\/miromannino\/miro-windows-manager](https:\/\/github.com\/miromannino\/miro-windows-manager)\nDownload: [https:\/\/github.com\/miromannino\/miro-windows-manager\/archive\/1.1.zip](https:\/\/github.com\/miromannino\/miro-windows-manager\/archive\/1.1.zip)",
+    "Field" : [
+
+    ],
     "name" : "MiroWindowsManager"
   }
 ]
