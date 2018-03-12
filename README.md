@@ -4,7 +4,7 @@ With this script you will be able to move the window in halves and in corners us
 
 Other projects (e.g. Spectacle) move windows in halves using arrows, and in corners using other counterintuitive shortcuts, like letters, which makes things confusing.
 
-This script needs Hammerspoon in order to works.
+This script needs Hammerspoon in order to work.
 
 ![example](https://github.com/miromannino/miro-windows-manager/raw/imgs/example.gif)
 
