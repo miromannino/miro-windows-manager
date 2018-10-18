@@ -404,6 +404,19 @@ function obj:goFullscreen()
   return self
 end
 
+--- MiroWindowsManager:center()
+--- Method
+--- Center
+---
+--- Parameters:
+---  * None.
+---
+--- Returns:
+---  * The MiroWindowsManager object
+function obj:goCenter()
+  return self:setToCenter()
+end
+
 
 -- ## Public undocumented
 
@@ -595,6 +608,16 @@ function obj:seqFullCell(seq)
 end
 
 
+-- Center window
+function obj:setToCenter()
+  local cell = frontmost.cell()
+  cell.center = self.GRID.cell().center
+
+  self._setPosition(cell)
+  return self
+end
+
+
 -- Set window to cell
 function obj._setPosition(cell)
   expect.truthy(
@@ -631,6 +654,7 @@ obj.hotkeys = {}
 ---   left        = {mods, "left"},
 ---   right       = {mods, "right"},
 ---   fullscreen  = {mods, "f"},
+---   center      = {mods, "c"},
 ---   moveUp      = {{'⌃','⌥'}, "up"},
 ---   moveDown    = {{'⌃','⌥'}, "down"},
 ---   moveLeft    = {{'⌃','⌥'}, "left"},
@@ -678,6 +702,12 @@ function obj:bindHotkeys(mapping)
     self.hotkeys[#self.hotkeys + 1] =
       hs.hotkey.bind(mapping.fullscreen[1], mapping.fullscreen[2],
       function() self:goFullscreen() end)
+  end
+
+  if mapping.center then
+    self.hotkeys[#self.hotkeys + 1] =
+      hs.hotkey.bind(mapping.center[1], mapping.center[2],
+      function() self:goCenter() end)
   end
 
 end
