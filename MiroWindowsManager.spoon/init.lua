@@ -217,11 +217,19 @@ end
 function obj:move(side)
   expect.argument_to_be_in_table(side, directions)
 
-  if self:currentlyBound(side) and not self.pushToNextScreen then
-    logger.i("`self.pushToNextScreen` == false so not moving to ".. side .." screen.")
+  register_press(side)
+  if currentlyPressed(directions_rel[side].opp) then
+    -- if still keydown moving the in the opposite direction, go full width/height
+    logger.i("Maximising ".. directions_rel[side].dim .." since "..
+      directions_rel[side].opp .." still active.")
+    self:growFully(directions_rel[side].grow) -- full width/height
   else
-    logger.i('Moving '.. side)
-    hs.grid['pushWindow'.. side:titleCase()](frontmost.window())
+    if self:currentlyBound(side) and not self.pushToNextScreen then
+      logger.i("`self.pushToNextScreen` == false so not moving to ".. side .." screen.")
+    else
+      logger.i('Moving '.. side)
+      hs.grid['pushWindow'.. side:titleCase()](frontmost.window())
+    end
   end
   return self
 end
@@ -249,7 +257,7 @@ function obj:grow(growth)
   expect.argument_to_be_in_table(growth, growths)
 
   register_press(growth)
-  if currentlyPressed(growths_rel[growth].opp) then 
+  if currentlyPressed(growths_rel[growth].opp) then
     logger.i("Maximising ".. growths_rel[growth].dim .." since '"..
       growths_rel[growth].opp .."' still active.")
     return self:growFully(growth) -- full width/height
@@ -331,7 +339,7 @@ function obj:go(move)
     end), "hunting for something other than 'c' in self.sizes")
 
   register_press(move)
-  if currentlyPressed(directions_rel[move].opp) then 
+  if currentlyPressed(directions_rel[move].opp) then
     -- if still keydown moving the in the opposite direction, go full width/height
     logger.i("Maximising ".. directions_rel[move].dim .." since "..
       directions_rel[move].opp .." still active.")
@@ -349,10 +357,11 @@ function obj:go(move)
     end
 
     seq = seq % #self.sizes  -- if at end of #self.sizes then wrap to 0
-    log_info = log_info .. " moving to sequence " .. tostring(seq + 1) .." (size: ".. tostring(self.sizes[seq + 1]) ..")"
+    log_info =
+      log_info .. " moving to sequence " .. tostring(seq + 1) .." (size: ".. tostring(self.sizes[seq + 1]) ..")"
     logger.i(log_info)
 
-    cell = self:setToSeq(move, seq + 1)
+    self:setToSeq(move, seq + 1)
   end
   return self
 end
@@ -376,7 +385,6 @@ function obj:goFullscreen()
       return x == 'c'
     end), "hunting for something other than 'c' in self.fullScreenSizes")
 
-  local cell
   local seq = self:currentFullSeq()  -- current sequence index or 0 if out of sequence
   local log_info = "We're at fullscreen sequence ".. tostring(seq) .." (".. frontmost.cell().string .."), so"
 
@@ -387,10 +395,11 @@ function obj:goFullscreen()
   end
 
   seq = seq % #self.fullScreenSizes  -- if #self.fullScreenSizes then 0
-  log_info = log_info .. " moving to sequence " .. tostring(seq + 1) .." (size: ".. tostring(self.fullScreenSizes[seq + 1]) ..")"
+  log_info =
+    log_info .. " moving to sequence " .. tostring(seq + 1) .." (size: ".. tostring(self.fullScreenSizes[seq + 1]) ..")"
   logger.i(log_info)
 
-  cell = self:setToFullSeq(seq + 1)  -- next in sequence
+  self:setToFullSeq(seq + 1)  -- next in sequence
 
   return self
 end
@@ -505,10 +514,12 @@ function obj:currentlyBound(side)
     return cell.x + cell.w == self.GRID.w
   end
 end
-hs.fnutils.each(directions,  -- currentlyUpBound(), currentlyDownBound, currentlyLeftBound, currentlyRightBound - on edge?
+hs.fnutils.each(
+  directions, -- currentlyUpBound(), currentlyDownBound, currentlyLeftBound, currentlyRightBound - on edge?
   function(side)
     obj['currently'.. side:titleCase() ..'Bound'] = function(self) return  self:currentlyBound(side) end
-  end )
+  end
+)
 
 
 -- ### Fullscreen methods
@@ -516,7 +527,7 @@ hs.fnutils.each(directions,  -- currentlyUpBound(), currentlyDownBound, currentl
 function obj:currentFullSeq()
   local cell = frontmost.cell()
 
-  local last_matched_seq = 
+  local last_matched_seq =
     self._lastFullSeq and  -- we've recorded a last seq, and
     self.fullScreenSizes[self._lastFullSeq] and  -- it's a valid index to fullScreenSizes
     self._lastFullSeq
