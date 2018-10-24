@@ -683,7 +683,8 @@ function obj:bindHotkeys(mapping)
       if mapping[move_command] then
         self.hotkeys[#self.hotkeys + 1] =
           hs.hotkey.bind(mapping[move_command][1], mapping[move_command][2],
-          function() self:move(direction) end)
+          function() self:move(direction) end,
+          function() cancel_press(direction) end)
       end
     end)
 
