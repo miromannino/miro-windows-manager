@@ -182,6 +182,60 @@ end
 
 -- ## Public
 
+--- MiroWindowsManager:move(side)
+--- Method
+--- Move the frontmost window up, down, left, right.  
+---
+--- Parameters:
+---  * side - 'up', 'down', 'left', or 'right'
+---
+--- Returns:
+---  * The MiroWindowsManager object
+function obj:move(side)
+  if self:currentlyBound(side) and not self.pushToNextScreen then
+    logger.i("`self.pushToNextScreen` == false so not moving to ".. side .." screen.")
+  else
+    logger.i('Moving '.. side)
+    hs.grid['pushWindow'.. titleCase(side)](frontmostWindow())
+  end
+
+  return self
+end
+hs.fnutils.each(obj._directions,  -- up(), down, left, right
+  function(move)
+    obj['move'.. titleCase(move)] = function(self) return self:move(move) end
+  end )
+
+obj._moveModeKeyWatcher = nil
+function obj:_moveModeOn()
+  logger.i("Move Mode on")
+  self._moveModeKeyWatcher = hs.eventtap.new({ hs.eventtap.event.types.keyDown }, function(ev)
+      local keyCode = ev:getKeyCode()
+      
+      if keyCode == hs.keycodes.map[self._movingKeys['left']] then
+        self:move('left')
+        return true
+      elseif keyCode == hs.keycodes.map[self._movingKeys['right']] then
+        self:move('right')
+        return true
+      elseif keyCode == hs.keycodes.map[self._movingKeys['down']] then
+        self:move('down')
+        return true
+      elseif keyCode == hs.keycodes.map[self._movingKeys['up']] then
+        self:move('up')
+        return true
+      else
+        return false
+      end
+  end):start()
+end
+function obj:_moveModeOff()
+  logger.i("Move Mode off");
+  self._moveModeKeyWatcher:stop()
+end
+
+
+
 --- MiroWindowsManager:growFully(growth)
 --- Method
 --- Grow the frontmost window to full width / height taller, wider.  
@@ -477,6 +531,7 @@ obj.hotkeys = {}
 ---   right       = {mods, "right"},
 ---   fullscreen  = {mods, "f"},
 ---   center      = {mods, "c"},
+---   move        = {mods, "v"}
 --- })
 --- ```
 function obj:bindHotkeys(mapping)
@@ -505,6 +560,12 @@ function obj:bindHotkeys(mapping)
     self.hotkeys[#self.hotkeys + 1] =
       hs.hotkey.bind(mapping.center[1], mapping.center[2],
       function() self:center() end)
+  end
+
+  if mapping.move then
+    self.hotkeys[#self.hotkeys + 1] =
+      hs.hotkey.bind(mapping.move[1], mapping.move[2], 
+        function() self:_moveModeOn() end, function() self:_moveModeOff() end)
   end
 
 end
