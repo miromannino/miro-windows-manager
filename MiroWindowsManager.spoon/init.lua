@@ -67,7 +67,7 @@ obj.sizes = {2, 3, 3/2}
 --- and 1/2 of the total screen's size.  
 --- Make sure that these numbers divide both dimensions of MiroWindowsManager.GRID to give integers.
 --- Use 'c' for the original size and shape of the window before starting to move it.
-obj.fullScreenSizes = {1, 4/3, 2, 'c'}
+obj.fullScreenSizes = {1, 2, 'c'}
 
 -- Comment: Lots of work here to save users a little work. Previous versions
 -- required users to call MiroWindowsManager:start() every time they changed
@@ -123,17 +123,18 @@ for _,move in ipairs(obj._directions) do
   obj._movingKeys[move] = move
 end
 
+obj._originalPositionStore = { fullscreen = {} }
+
 obj._moveModeKeyWatcher = nil
 obj._resizeModeKeyWatcher = nil
+
 obj._pressed = {}
 obj._pressTimers = {}
-obj._originalPositionStore = {}
 obj._lastSeq = {}
 obj._lastFullscreenSeq = nil
 local function initPressed(move)
   obj._pressed[move] = false
   obj._pressTimers[move] = hs.timer.doAfter(1, function() obj._pressed[move] = false end)
-  obj._originalPositionStore[move] = {}
 end
 hs.fnutils.each(obj._directions, initPressed)
 local function registerPress(direction)
@@ -339,7 +340,7 @@ function obj:fullscreen()
 
   if seq == 0 then
     if hs.fnutils.contains(self.fullScreenSizes, 'c') then
-      logger.i("Since we are at seq 0, storing current position to use it with 'c'")
+      logger.i("Since we are at seq 0, storing current position to use it with 'c' for window " .. frontmostWindow():id())
       self._originalPositionStore['fullscreen'][frontmostWindow():id()] = frontmostCell()
     end
   end
@@ -487,6 +488,13 @@ function obj:setToFullscreenSeq(seq)
   logger.i('lastMatchedSeq: ' .. tostring(lastMatchedSeq))
 
   self._setPosition(self:getFullscreenCell(seq))
+
+  if self.fullScreenSizes[seq] == 'c' then
+    -- we want to use the value only once and then discarge
+    -- this is in case the window was in one of the full screen position/size
+    self._originalPositionStore['fullscreen'][frontmostWindow():id()] = nil
+  end
+
   self._lastFullscreenSeq = seq
   return self
 end
@@ -497,12 +505,11 @@ function obj:getFullscreenCell(seq)
   local pnt, size
 
   if seq_factor == 'c' then
-    -- we want to use the value only once and then discarge
-    -- this is in case the window was in one of the full screen position/size
-    local cell = self._originalPositionStore['fullscreen'][frontmostWindow():id()]
-    self._originalPositionStore['fullscreen'][frontmostWindow():id()] = nil
-    return cell
+    return self._originalPositionStore['fullscreen'][frontmostWindow():id()]
   end
+
+  logger.i('window id: ' .. tostring(frontmostWindow():id()))
+  logger.i('windows: ' .. hs.inspect(self._originalPositionStore['fullscreen']))
 
   size = hs.geometry.size(
     self.GRID.w / seq_factor,
@@ -607,6 +614,14 @@ function obj:bindHotkeys(mapping)
         function() self:_resizeModeOn() end, 
         function() self:_resizeModeOff() end)
     end
+
+    hs.hotkey.bind(
+      {"ctrl", "alt", "cmd"},
+      "l",
+      function () 
+        logger.i('window id: ' .. tostring(frontmostWindow():id()))
+        logger.i('windows: ' .. hs.inspect(self._originalPositionStore['fullscreen']))
+      end)
 
   end
 
