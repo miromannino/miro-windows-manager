@@ -87,21 +87,34 @@ function obj.GRID.cell()
 end
 
 
---- MiroWindowsManager.moveToNextScreen
+--- MiroWindowsManager.pushToNextScreen
 --- Variable
 --- Boolean value to decide wether or not to move the window on the next screen
 --- if the window is moved the screen edge.
-obj.moveToNextScreen = false
+obj.pushToNextScreen = false
 
+
+--- MiroWindowsManager.resizeRate
+--- Variable
+--- Float value to decide the the rate to resize windows. With a value of 1.05 it means that 
+--- everytime the window is made taller/wider by 5% more (or shorter/thinner by 5% less)
+obj.resizeRate = 1.05
 
 -- ## Internal
 
 obj._directions = { 'up', 'down', 'left', 'right' }
-obj._directions_rel = {
+obj._directionsRel = {
   up =    { opp = 'down',  dim = 'h', pos = 'y', home = function() return 0 end },
   down =  { opp = 'up',    dim = 'h', pos = 'y', home = function() return obj.GRID.h end },
   left =  { opp = 'right', dim = 'w', pos = 'x', home = function() return 0 end },
   right = { opp = 'left',  dim = 'w', pos = 'x', home = function() return obj.GRID.w end }
+}
+obj._growths = { 'taller', 'shorter', 'wider', 'thinner' }
+obj._growthsRel = {
+  taller  = { opp = 'shorter', dim = 'h', pos = 'y', growthSign = 1 },
+  shorter = { opp = 'taller',  dim = 'h', pos = 'y', growthSign = -1 },
+  wider   = { opp = 'thinner', dim = 'w', pos = 'x', growthSign = 1 },
+  thinner = { opp = 'wider',   dim = 'w', pos = 'x', growthSign = -1 },
 }
 
 -- The keys used to move, generally the arrow keys, but they could also be WASD or something else
@@ -110,26 +123,26 @@ for _,move in ipairs(obj._directions) do
   obj._movingKeys[move] = move
 end
 
+obj._moveModeKeyWatcher = nil
+obj._resizeModeKeyWatcher = nil
 obj._pressed = {}
-obj._press_timers = {}
+obj._pressTimers = {}
 obj._originalPositionStore = {}
 obj._lastSeq = {}
 obj._lastFullscreenSeq = nil
 local function initPressed(move)
   obj._pressed[move] = false
-  obj._press_timers[move] = hs.timer.doAfter(1, function() obj._pressed[move] = false end)
+  obj._pressTimers[move] = hs.timer.doAfter(1, function() obj._pressed[move] = false end)
   obj._originalPositionStore[move] = {}
 end
 hs.fnutils.each(obj._directions, initPressed)
-initPressed('fullscreen')
-
 local function registerPress(direction)
   obj._pressed[direction] = true
-  obj._press_timers[direction]:start()
+  obj._pressTimers[direction]:start()
 end
 local function cancelPress(direction)
   obj._pressed[direction] = false
-  obj._press_timers[direction]:stop()
+  obj._pressTimers[direction]:stop()
 end
 local function currentlyPressed(direction)
   return obj._pressed[direction]
@@ -155,6 +168,10 @@ function frontmostWindow()
   return hs.window.frontmostWindow()
 end
 
+function frontmostScreen()
+  return frontmostWindow():screen()
+end
+
 function frontmostCell()
   local win = frontmostWindow()
   return hs.grid.get(win, win:screen())
@@ -178,15 +195,8 @@ function obj:move(side)
     logger.i('Moving '.. side)
     hs.grid['pushWindow'.. titleCase(side)](frontmostWindow())
   end
-
   return self
 end
-hs.fnutils.each(obj._directions,  -- up(), down, left, right
-  function(move)
-    obj['move'.. titleCase(move)] = function(self) return self:move(move) end
-    end )
-
-obj._moveModeKeyWatcher = nil
 function obj:_moveModeOn()
   logger.i("Move Mode on")
   self._moveModeKeyWatcher = hs.eventtap.new({ hs.eventtap.event.types.keyDown }, function(ev)
@@ -195,26 +205,75 @@ function obj:_moveModeOn()
     if keyCode == hs.keycodes.map[self._movingKeys['left']] then
       self:move('left')
       return true
-      elseif keyCode == hs.keycodes.map[self._movingKeys['right']] then
-        self:move('right')
-        return true
-        elseif keyCode == hs.keycodes.map[self._movingKeys['down']] then
-          self:move('down')
-          return true
-          elseif keyCode == hs.keycodes.map[self._movingKeys['up']] then
-            self:move('up')
-            return true
-          else
-            return false
-          end
-          end):start()
+    elseif keyCode == hs.keycodes.map[self._movingKeys['right']] then
+      self:move('right')
+      return true
+    elseif keyCode == hs.keycodes.map[self._movingKeys['down']] then
+      self:move('down')
+      return true
+    elseif keyCode == hs.keycodes.map[self._movingKeys['up']] then
+      self:move('up')
+      return true
+    else
+      return false
+    end
+  end):start()
 end
 function obj:_moveModeOff()
   logger.i("Move Mode off");
   self._moveModeKeyWatcher:stop()
 end
 
+--- MiroWindowsManager:resize(growth)
+--- Method
+--- Resize the frontmost window taller, shorter, wider, thinner.
+---
+--- Parameters:
+---  * growth - 'taller', 'shorter', 'wider', 'thinner'
+---
+--- Returns:
+---  * The MiroWindowsManager object
+function obj:resize(growth)
+  logger.i('resize ' .. growth)
 
+  local w = frontmostWindow()
+  local fr = w:frame()
+
+  local growthDiff = fr[self._growthsRel[growth].dim] * (self.resizeRate - 1) 
+  fr[self._growthsRel[growth].pos] = fr[self._growthsRel[growth].pos] - (self._growthsRel[growth].growthSign * growthDiff / 2)
+  fr[self._growthsRel[growth].dim] = fr[self._growthsRel[growth].dim] + (self._growthsRel[growth].growthSign * growthDiff)
+
+  if fr['y'] < 0 then fr['y'] = 0 end
+  if fr['x'] < 0 then fr['x'] = 0 end
+
+  w:setFrame(fr)
+  return self
+end
+function obj:_resizeModeOn()
+  logger.i("Resize Mode on")
+  self._resizeModeKeyWatcher = hs.eventtap.new({ hs.eventtap.event.types.keyDown }, function(ev)
+    local keyCode = ev:getKeyCode()
+    if keyCode == hs.keycodes.map[self._movingKeys['left']] then
+      self:resize('thinner')
+      return true
+    elseif keyCode == hs.keycodes.map[self._movingKeys['right']] then
+      self:resize('wider')
+      return true
+    elseif keyCode == hs.keycodes.map[self._movingKeys['down']] then
+      self:resize('shorter')
+      return true
+    elseif keyCode == hs.keycodes.map[self._movingKeys['up']] then
+      self:resize('taller')
+      return true
+    else
+      return false
+    end
+  end):start()
+end
+function obj:_resizeModeOff()
+  logger.i("Resize Mode off");
+  self._resizeModeKeyWatcher:stop()
+end
 
 --- MiroWindowsManager:growFully(growth)
 --- Method
@@ -246,11 +305,11 @@ end
 ---  * The MiroWindowsManager object
 function obj:go(move)
   registerPress(move)
-  if currentlyPressed(self._directions_rel[move].opp) then
+  if currentlyPressed(self._directionsRel[move].opp) then
     -- if still keydown moving the in the opposite direction, go full width/height
-    logger.i("Maximising " .. self._directions_rel[move].dim .. " since " 
-      .. self._directions_rel[move].opp .." still active.")
-    self:growFully(self._directions_rel[move].dim) -- full width/height
+    logger.i("Maximising " .. self._directionsRel[move].dim .. " since " 
+      .. self._directionsRel[move].opp .." still active.")
+    self:growFully(self._directionsRel[move].dim) -- full width/height
   else
     local cell = frontmostCell()
     local seq = self:currentSeq(move)  -- current sequence index or 0 if out of sequence
@@ -320,7 +379,7 @@ end
 -- Query sequence for `side` - 0 means out of sequence
 function obj:currentSeq(side)
   if self:currentlyBound(side) then
-    local dim = self._directions_rel[side].dim
+    local dim = self._directionsRel[side].dim
     local width = frontmostCell()[dim]
     local relative_size = self.GRID[dim] / width
 
@@ -352,12 +411,12 @@ function obj:currentSeq(side)
 function obj:setToSeq(move, seq)
   local cell = frontmostCell()
 
-  cell[self._directions_rel[move].dim] = self.GRID[self._directions_rel[move].dim] / self.sizes[seq]
+  cell[self._directionsRel[move].dim] = self.GRID[self._directionsRel[move].dim] / self.sizes[seq]
 
   if move == 'left' or move == 'up' then
-    cell[self._directions_rel[move].pos] = self._directions_rel[move].home()
+    cell[self._directionsRel[move].pos] = self._directionsRel[move].home()
   else
-    cell[self._directions_rel[move].pos] = self._directions_rel[move].home() - cell[self._directions_rel[move].dim]
+    cell[self._directionsRel[move].pos] = self._directionsRel[move].home() - cell[self._directionsRel[move].dim]
   end
 
   cell = self:snap_to_grid(cell)
@@ -539,6 +598,14 @@ function obj:bindHotkeys(mapping)
         mapping.move[2], 
         function() self:_moveModeOn() end, 
         function() self:_moveModeOff() end)
+    end
+
+    if mapping.resize then
+      self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
+        mapping.resize[1], 
+        mapping.resize[2], 
+        function() self:_resizeModeOn() end, 
+        function() self:_resizeModeOff() end)
     end
 
   end
