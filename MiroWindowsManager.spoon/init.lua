@@ -17,15 +17,13 @@
 
 --- === MiroWindowsManager ===
 ---
---- With this Spoon you will be able to move the window in halves and in
---- corners using your keyboard and mainly using arrows. You would also be able
---- to resize them by thirds, quarters, or halves.  
+--- With this Spoon you will be able to move the window in halves and in corners using your keyboard and mainly using
+--- arrows. You would also be able to resize them by thirds, quarters, or halves.  
 --- Official homepage for more info and documentation:
 --- [https://github.com/miromannino/miro-windows-manager](https://github.com/miromannino/miro-windows-manager)
 --- 
---- NOTE: This Spoon sets `hs.grid` globals with `hs.grid.setGrid()`,
---- `hs.grid.MARGINX`, and `hs.grid.MARGINY`. Changing MiroWindowsManager.GRID
---- will change these globals.
+--- NOTE: This Spoon sets `hs.grid` globals with `hs.grid.setGrid()`, `hs.grid.MARGINX`, and `hs.grid.MARGINY`.
+--- Changing MiroWindowsManager.GRID will change these globals.
 ---
 --- Download:
 --- https://github.com/miromannino/miro-windows-manager/raw/master/MiroWindowsManager.spoon.zip
@@ -63,24 +61,22 @@ obj.sizes = {2, 3, 3/2}
 --- Variable
 --- The sizes that the window can have in full-screen.  
 --- The sizes are expressed as dividend of the entire screen's size.  
---- For example `{1, 4/3, 2}` means that it can be 1/1 (hence full screen), 3/4
---- and 1/2 of the total screen's size.  
+--- For example `{1, 4/3, 2}` means that it can be 1/1 (hence full screen), 3/4 and 1/2 of the total screen's size.  
 --- Make sure that these numbers divide both dimensions of MiroWindowsManager.GRID to give integers.
 --- Use 'c' for the original size and shape of the window before starting to move it.
 obj.fullScreenSizes = {1, 2, 'c'}
 
--- Comment: Lots of work here to save users a little work. Previous versions
--- required users to call MiroWindowsManager:start() every time they changed
--- GRID. The metatable work here watches for those changes and does the work
--- :start() would have done.
+-- Comment: Lots of work here to save users a little work. Previous versions required users to call
+-- MiroWindowsManager:start() every time they changed GRID. The metatable work here watches for those changes and does
+-- the work :start() would have done.
 package.path = package.path..";Spoons/".. ... ..".spoon/?.lua"
 require('extend_GRID').extend(obj, logger)
 
 --- MiroWindowsManager.GRID
 --- Variable
 --- The screen's grid size.  
---- Ensuring that the numbers in MiroWindowsManager.sizes and
---- Make sure that the numbers in MiroWindowsManager.fullScreenSizes divide h and w to give integers.
+--- Make sure that the numbers in MiroWindowsManager.sizes and MiroWindowsManager.fullScreenSizes divide h and w to give
+--- integers.
 obj.GRID = { w = 24, h = 24, margins = hs.geometry.point(0,0) }
 function obj.GRID.cell()
   return hs.geometry(obj.GRID.margins, hs.geometry.size(obj.GRID.w, obj.GRID.h))
@@ -89,15 +85,14 @@ end
 
 --- MiroWindowsManager.pushToNextScreen
 --- Variable
---- Boolean value to decide wether or not to move the window on the next screen
---- if the window is moved the screen edge.
+--- Boolean value to decide wether or not to move the window on the next screen if the window is moved the screen edge.
 obj.pushToNextScreen = false
 
 
 --- MiroWindowsManager.resizeRate
 --- Variable
---- Float value to decide the the rate to resize windows. With a value of 1.05 it means that 
---- everytime the window is made taller/wider by 5% more (or shorter/thinner by 5% less)
+--- Float value to decide the rate at which to resize windows. A value of 1.05 means that the window is made
+--- taller/wider (or shorter/thinner) in 5% increments.
 obj.resizeRate = 1.05
 
 -- ## Internal
@@ -117,7 +112,7 @@ obj._growthsRel = {
   thinner = { opp = 'wider',   dim = 'w', pos = 'x', growthSign = -1 },
 }
 
--- The keys used to move, generally the arrow keys, but they could also be WASD or something else
+-- The keys used to move, generally the arrow keys, but they could also be WASD or something else.
 obj._movingKeys = { }
 for _,move in ipairs(obj._directions) do
   obj._movingKeys[move] = move
@@ -152,11 +147,11 @@ end
 
 -- ### Utilities
 
-function titleCase(str)
+local function titleCase(str)
   return (str:gsub('^%l', string.upper))
 end
 
-function round(num)
+local function round(num)
   if num >= 0 then
     return math.floor(num+.499999999)
   else
@@ -164,16 +159,16 @@ function round(num)
   end
 end
 
--- Accessor for functions on the frontmost window
-function frontmostWindow()
+-- Accessor for functions on the frontmost window.
+local function frontmostWindow()
   return hs.window.frontmostWindow()
 end
 
-function frontmostScreen()
+local function frontmostScreen()
   return frontmostWindow():screen()
 end
 
-function frontmostCell()
+local function frontmostCell()
   local win = frontmostWindow()
   return hs.grid.get(win, win:screen())
 end
@@ -227,10 +222,10 @@ end
 
 --- MiroWindowsManager:resize(growth)
 --- Method
---- Resize the frontmost window taller, shorter, wider, thinner.
+--- Resize the frontmost window taller, shorter, wider, or thinner.
 ---
 --- Parameters:
----  * growth - 'taller', 'shorter', 'wider', 'thinner'
+---  * growth - 'taller', 'shorter', 'wider', or 'thinner'
 ---
 --- Returns:
 ---  * The MiroWindowsManager object
@@ -240,9 +235,11 @@ function obj:resize(growth)
   local w = frontmostWindow()
   local fr = w:frame()
 
-  local growthDiff = fr[self._growthsRel[growth].dim] * (self.resizeRate - 1) 
-  fr[self._growthsRel[growth].pos] = fr[self._growthsRel[growth].pos] - (self._growthsRel[growth].growthSign * growthDiff / 2)
-  fr[self._growthsRel[growth].dim] = fr[self._growthsRel[growth].dim] + (self._growthsRel[growth].growthSign * growthDiff)
+  local growthDiff = fr[self._growthsRel[growth].dim] * (self.resizeRate - 1)
+  fr[self._growthsRel[growth].pos] =
+    fr[self._growthsRel[growth].pos] - (self._growthsRel[growth].growthSign * growthDiff / 2)
+  fr[self._growthsRel[growth].dim] =
+    fr[self._growthsRel[growth].dim] + (self._growthsRel[growth].growthSign * growthDiff)
 
   if fr['y'] < 0 then fr['y'] = 0 end
   if fr['x'] < 0 then fr['x'] = 0 end
@@ -300,16 +297,16 @@ end
 --- Tap both directions to go full width / height.  
 ---
 --- Parameters:
----  * move - 'up', 'down', 'left', 'right'
+---  * move - 'up', 'down', 'left', or 'right'
 ---
 --- Returns:
 ---  * The MiroWindowsManager object
 function obj:go(move)
   registerPress(move)
   if currentlyPressed(self._directionsRel[move].opp) then
-    -- if still keydown moving the in the opposite direction, go full width/height
-    logger.i("Maximising " .. self._directionsRel[move].dim .. " since " 
-      .. self._directionsRel[move].opp .." still active.")
+    -- if still keydown moving in the opposite direction, go full width/height
+    logger.i("Maximising " .. self._directionsRel[move].dim .. " since " .. self._directionsRel[move].opp ..
+             " still active.")
     self:growFully(self._directionsRel[move].dim) -- full width/height
   else
     local cell = frontmostCell()
@@ -340,17 +337,19 @@ function obj:fullscreen()
 
   if seq == 0 then
     if hs.fnutils.contains(self.fullScreenSizes, 'c') then
-      logger.i("Since we are at seq 0, storing current position to use it with 'c' for window " .. frontmostWindow():id())
+      logger.i("Since we are at seq 0, storing current position to use it with 'c' for window " ..
+               frontmostWindow():id())
       self._originalPositionStore['fullscreen'][frontmostWindow():id()] = frontmostCell()
     end
   end
 
-  seq = seq % #self.fullScreenSizes + 1  -- if seq = #self.fullScreenSizes then 0 so next seq = 1 (we cycle through sizes)
+  -- if seq = #self.fullScreenSizes then 0 so next seq = 1 (we cycle through sizes)
+  seq = seq % #self.fullScreenSizes + 1
   logger.i("Updating seq to " .. tostring(seq) .." (size: ".. tostring(self.fullScreenSizes[seq]) ..")")
 
   if self.fullScreenSizes[seq] == 'c' then
     logger.i("Seq is 'c' but we don't have a saved position, skip to the next one")
-    if not self._originalPositionStore['fullscreen'][frontmostWindow():id()] then 
+    if not self._originalPositionStore['fullscreen'][frontmostWindow():id()] then
       seq = seq % #self.fullScreenSizes + 1
     end
   end
@@ -384,12 +383,11 @@ function obj:currentSeq(side)
     local width = frontmostCell()[dim]
     local relative_size = self.GRID[dim] / width
 
-    -- TODO
     local lastMatchedSeq =
       self._lastSeq[side] and  -- we've recorded a last seq, and
       self.sizes[self._lastSeq[side]] and  -- it's a valid index to sizes
       self._lastSeq[side]
-      local lastMatchedSeqMatchesFrontmost =
+    local lastMatchedSeqMatchesFrontmost =
       lastMatchedSeq and (self.sizes[lastMatchedSeq] == relative_size)
 
     -- cleanup
@@ -432,22 +430,21 @@ function obj:currentlyBound(side)
   local cell = frontmostCell()
   if side == 'up' then
     return cell.y == 0
-    elseif side == 'down' then
-      return cell.y + cell.h == self.GRID.h
-      elseif side == 'left' then
-        return cell.x == 0
-        elseif side == 'right' then
-          return cell.x + cell.w == self.GRID.w
-        end
-      end
+  elseif side == 'down' then
+    return cell.y + cell.h == self.GRID.h
+  elseif side == 'left' then
+    return cell.x == 0
+  elseif side == 'right' then
+    return cell.x + cell.w == self.GRID.w
+  end
+end
 
 -- ### Fullscreen methods
 
 -- Query whether window is centered
 function obj:currentlyCentered()
   local cell = frontmostCell()
-  return cell.w + 2 * cell.x == self.GRID.w and
-  cell.h + 2 * cell.y == self.GRID.h
+  return cell.w + 2 * cell.x == self.GRID.w and cell.h + 2 * cell.y == self.GRID.h
 end
 
 function obj:snap_to_grid(cell)
@@ -464,8 +461,8 @@ function obj:currentFullscreenSeq()
       self.fullScreenSizes[self._lastFullscreenSeq] and -- it's (still) a valid index to fullScreenSizes
       cell == self:getFullscreenCell(self._lastFullscreenSeq) then -- last matched seq is same as the current fullscreen
     logger.i('last matched seq is same as current cell, so returning seq = ' .. tostring(self._lastFullscreenSeq))
-    return self._lastFullscreenSeq 
-  else 
+    return self._lastFullscreenSeq
+  else
     self._lastFullscreenSeq = nil -- cleanup if the last matched seq doesn't match the frontmost
   end
 
@@ -478,20 +475,18 @@ function obj:currentFullscreenSeq()
     end
   end
 
-  -- we cannot find any fullscreen size that match the current window state, so we start with 0
+  -- we cannot find any fullscreen size that matches the current window state, so we start with 0
   return 0
 
 end
 
 -- Set fullscreen sequence
 function obj:setToFullscreenSeq(seq)
-  logger.i('lastMatchedSeq: ' .. tostring(lastMatchedSeq))
-
   self._setPosition(self:getFullscreenCell(seq))
 
   if self.fullScreenSizes[seq] == 'c' then
-    -- we want to use the value only once and then discarge
-    -- this is in case the window was in one of the full screen position/size
+    -- we want to use the value only once and then discard it
+    -- this is in case the window was in one of the full screen positions/sizes
     self._originalPositionStore['fullscreen'][frontmostWindow():id()] = nil
   end
 
@@ -546,12 +541,13 @@ obj.hotkeys = {}
 ---   * down: for the down action (usually `{hyper, "down"}`)
 ---   * fullscreen: for the full-screen action (e.g. `{hyper, "f"}`)
 ---   * center: for the center action (e.g. `{hyper, "c"}`)
----   * move: for the move action (e.g. `{hyper, "v"}`). The move action is
----           active as soon as the hotkey is pressed. While active the left, 
----           right, up or down keys can be used (these are configured by 
----           the actions above). 
+---   * move: for the move action (e.g. `{hyper, "v"}`). The move action is active as soon as the hotkey is pressed.
+---       While active the left, right, up or down keys can be used (these are configured by the actions above). 
+---   * resize: for the resize action (e.g. `{hyper, "d"}`). The resize action is active as soon as the hotkey is
+---       pressed. While active the left, right, up or down keys can be used (these are configured by the actions
+---       above).
 ---
---- A configuration example can be:
+--- A configuration example:
 --- ``` lua
 --- local hyper = {"ctrl", "alt", "cmd"}
 --- spoon.MiroWindowsManager:bindHotkeys({
@@ -561,20 +557,23 @@ obj.hotkeys = {}
 ---   right       = {hyper, "right"},
 ---   fullscreen  = {hyper, "f"},
 ---   center      = {hyper, "c"},
----   move        = {hyper, "v"}
+---   move        = {hyper, "v"},
+---   resize      = {hyper, "d" }
 --- })
----
---- In this example ctrl+alt+cmd+up will perform the 'up' action
---- Keeping ctrl+alt+cmd+v pressed you can move the window using the arrow keys up,down,left, and right
---- Pressing ctrl+alt+cmd+f the window will be maximized.
 --- ```
+---
+--- In this example ctrl+alt+cmd+up will perform the 'up' action.
+--- Pressing ctrl+alt+cmd+c the window will be centered.
+--- Pressing ctrl+alt+cmd+f the window will be maximized.
+--- Keeping ctrl+alt+cmd+v pressed you can move the window using the arrow keys up, down, left, and right.
+--- Keeping ctrl+alt+cmd+d pressed you can resize the window using the arrow keys up, down, left, and right.
 function obj:bindHotkeys(mapping)
   logger.i("Bind Hotkeys for Miro's Windows Manager")
 
   for _,direction in ipairs(self._directions) do
     if mapping[direction] then
       self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
-        mapping[direction][1], 
+        mapping[direction][1],
         mapping[direction][2],
         function() self:go(direction) end,
         function() cancelPress(direction) end)
@@ -587,38 +586,38 @@ function obj:bindHotkeys(mapping)
 
     if mapping.fullscreen then
       self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
-        mapping.fullscreen[1], 
+        mapping.fullscreen[1],
         mapping.fullscreen[2],
         function() self:fullscreen() end)
     end
 
     if mapping.center then
       self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
-        mapping.center[1], 
+        mapping.center[1],
         mapping.center[2],
         function() self:center() end)
     end
 
     if mapping.move then
       self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
-        mapping.move[1], 
-        mapping.move[2], 
-        function() self:_moveModeOn() end, 
+        mapping.move[1],
+        mapping.move[2],
+        function() self:_moveModeOn() end,
         function() self:_moveModeOff() end)
     end
 
     if mapping.resize then
       self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
-        mapping.resize[1], 
-        mapping.resize[2], 
-        function() self:_resizeModeOn() end, 
+        mapping.resize[1],
+        mapping.resize[2],
+        function() self:_resizeModeOn() end,
         function() self:_resizeModeOff() end)
     end
 
     hs.hotkey.bind(
       {"ctrl", "alt", "cmd"},
       "l",
-      function () 
+      function ()
         logger.i('window id: ' .. tostring(frontmostWindow():id()))
         logger.i('windows: ' .. hs.inspect(self._originalPositionStore['fullscreen']))
       end)
@@ -627,6 +626,7 @@ function obj:bindHotkeys(mapping)
 
 --- MiroWindowsManager:init()
 --- Method
+--- Currently does nothing (implemented so that treating this Spoon like others won't cause errors).
 function obj:init()
   -- void (but it could be used to initialize the module)
 end
