@@ -193,32 +193,6 @@ function obj:move(side)
   end
   return self
 end
-function obj:_moveModeOn()
-  logger.i("Move Mode on")
-  self._moveModeKeyWatcher = hs.eventtap.new({ hs.eventtap.event.types.keyDown }, function(ev)
-    local keyCode = ev:getKeyCode()
-
-    if keyCode == hs.keycodes.map[self._movingKeys['left']] then
-      self:move('left')
-      return true
-    elseif keyCode == hs.keycodes.map[self._movingKeys['right']] then
-      self:move('right')
-      return true
-    elseif keyCode == hs.keycodes.map[self._movingKeys['down']] then
-      self:move('down')
-      return true
-    elseif keyCode == hs.keycodes.map[self._movingKeys['up']] then
-      self:move('up')
-      return true
-    else
-      return false
-    end
-  end):start()
-end
-function obj:_moveModeOff()
-  logger.i("Move Mode off");
-  self._moveModeKeyWatcher:stop()
-end
 
 --- MiroWindowsManager:resize(growth)
 --- Method
@@ -246,31 +220,6 @@ function obj:resize(growth)
 
   w:setFrame(fr)
   return self
-end
-function obj:_resizeModeOn()
-  logger.i("Resize Mode on")
-  self._resizeModeKeyWatcher = hs.eventtap.new({ hs.eventtap.event.types.keyDown }, function(ev)
-    local keyCode = ev:getKeyCode()
-    if keyCode == hs.keycodes.map[self._movingKeys['left']] then
-      self:resize('thinner')
-      return true
-    elseif keyCode == hs.keycodes.map[self._movingKeys['right']] then
-      self:resize('wider')
-      return true
-    elseif keyCode == hs.keycodes.map[self._movingKeys['down']] then
-      self:resize('shorter')
-      return true
-    elseif keyCode == hs.keycodes.map[self._movingKeys['up']] then
-      self:resize('taller')
-      return true
-    else
-      return false
-    end
-  end):start()
-end
-function obj:_resizeModeOff()
-  logger.i("Resize Mode off");
-  self._resizeModeKeyWatcher:stop()
 end
 
 --- MiroWindowsManager:growFully(growth)
@@ -599,19 +548,32 @@ function obj:bindHotkeys(mapping)
     end
 
     if mapping.move then
+      local modal = hs.hotkey.modal.new()
+      function modal:entered() logger.i("Move Mode on") end
+      function modal:exited() logger.i("Move Mode off") end
+      hs.fnutils.each(self._movingKeys, function(move)
+        modal:bind(mapping.move[1], self._movingKeys[move], function () self:move(move) end)
+      end)
       self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
         mapping.move[1],
         mapping.move[2],
-        function() self:_moveModeOn() end,
-        function() self:_moveModeOff() end)
+        function() modal:enter() end,
+        function() modal:exit() end)
     end
 
     if mapping.resize then
+      local modal = hs.hotkey.modal.new()
+      function modal:entered() logger.i("Resize Mode on") end
+      function modal:exited() logger.i("Resize Mode off") end
+      local map = { left = 'thinner', right = 'wider', down = 'shorter', up = 'taller' }
+      for move,resize in pairs(map) do
+        modal:bind(mapping.move[1], move, function () self:resize(resize) end)
+      end
       self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
         mapping.resize[1],
         mapping.resize[2],
-        function() self:_resizeModeOn() end,
-        function() self:_resizeModeOff() end)
+        function() modal:enter() end,
+        function() modal:exit() end)
     end
 
     hs.hotkey.bind(
