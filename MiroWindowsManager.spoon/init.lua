@@ -215,8 +215,7 @@ function obj:resize(growth)
   fr[self._growthsRel[growth].dim] =
     fr[self._growthsRel[growth].dim] + (self._growthsRel[growth].growthSign * growthDiff)
 
-  if fr['y'] < 0 then fr['y'] = 0 end
-  if fr['x'] < 0 then fr['x'] = 0 end
+  fr = fr:intersect(frontmostScreen():frame())  -- avoid sizing out of bounds
 
   w:setFrame(fr)
   return self
