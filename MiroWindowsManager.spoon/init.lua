@@ -120,7 +120,7 @@ for _,move in ipairs(obj._directions) do
 end
 
 obj._originalPositionStore = { fullscreen = {} }
-setmetatable(obj._originalPositionStore, {__mode = 'kv'})  -- weak table, so it doesn't become a memory hog
+setmetatable(obj._originalPositionStore.fullscreen, {__mode = 'kv'})  -- weak table, so it doesn't become a memory hog
 
 obj._lastSeq = {}
 obj._lastFullscreenSeq = nil
