@@ -120,29 +120,8 @@ end
 
 obj._originalPositionStore = { fullscreen = {} }
 
-obj._moveModeKeyWatcher = nil
-obj._resizeModeKeyWatcher = nil
-
-obj._pressed = {}
-obj._pressTimers = {}
 obj._lastSeq = {}
 obj._lastFullscreenSeq = nil
-local function initPressed(move)
-  obj._pressed[move] = false
-  obj._pressTimers[move] = hs.timer.doAfter(1, function() obj._pressed[move] = false end)
-end
-hs.fnutils.each(obj._directions, initPressed)
-local function registerPress(direction)
-  obj._pressed[direction] = true
-  obj._pressTimers[direction]:start()
-end
-local function cancelPress(direction)
-  obj._pressed[direction] = false
-  obj._pressTimers[direction]:stop()
-end
-local function currentlyPressed(direction)
-  return obj._pressed[direction]
-end
 
 
 -- ### Utilities
@@ -250,15 +229,8 @@ end
 --- Returns:
 ---  * The MiroWindowsManager object
 function obj:go(move)
-  registerPress(move)
-  if currentlyPressed(self._directionsRel[move].opp) then
-    -- if still keydown moving in the opposite direction, go full width/height
-    logger.i("Maximising " .. self._directionsRel[move].dim .. " since " .. self._directionsRel[move].opp ..
-             " still active.")
-    self:growFully(self._directionsRel[move].dim) -- full width/height
-  else
-    local cell = frontmostCell()
-    local seq = self:currentSeq(move)  -- current sequence index or 0 if out of sequence
+  local cell = frontmostCell()
+  local seq = self:currentSeq(move)  -- current sequence index or 0 if out of sequence
 
     logger.i("We're at ".. move .." sequence ".. tostring(seq) .." (".. cell.string ..")")
 
@@ -518,62 +490,63 @@ obj.hotkeys = {}
 function obj:bindHotkeys(mapping)
   logger.i("Bind Hotkeys for Miro's Windows Manager")
 
+  -- `growFully` modals
+  local growFullyModals = {}
+  for _,direction in ipairs(self._directions) do
+    local modal = hs.hotkey.modal.new()
+
+    -- primary direction
+    function modal.entered(_) logger.d(direction..' modal entered.') end
+    function modal.exited(_)  logger.d(direction..' modal exited.')  end
+
+    -- opposite direction: growFully()
+    if mapping[direction] and mapping[self._directionsRel[direction].opp] then
+      modal:bind(
+        mapping[direction][1],
+        mapping[self._directionsRel[direction].opp][2],
+        function()
+          logger.i('… from '..direction..', `grow`ing.')
+          self:growFully(self._directionsRel[direction].dim)
+        end)
+      growFullyModals[direction] = modal
+    end
+  end
+
+  -- `go` hotkeys
   for _,direction in ipairs(self._directions) do
     if mapping[direction] then
       self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
         mapping[direction][1],
         mapping[direction][2],
-        function() self:go(direction) end,
-        function() cancelPress(direction) end)
+        function()
+          self:go(direction)
+          growFullyModals[direction]:enter()
+        end,
+        function()
+          growFullyModals[direction]:exit()
+        end)
 
-        -- save the keys that the user decided to be for directions, 
-        -- generally the arrows keys, but it could be also WASD.
-        self._movingKeys[direction] = mapping[direction][2]
-      end
+      -- save the keys that the user decided to be for directions, 
+      -- generally the arrows keys, but it could be also WASD.
+      self._movingKeys[direction] = mapping[direction][2]
     end
+  end
 
-    if mapping.fullscreen then
-      self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
-        mapping.fullscreen[1],
-        mapping.fullscreen[2],
-        function() self:fullscreen() end)
-    end
+  -- `fullscreen` hotkey
+  if mapping.fullscreen then
+    self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
+      mapping.fullscreen[1],
+      mapping.fullscreen[2],
+      function() self:fullscreen() end)
+  end
 
-    if mapping.center then
-      self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
-        mapping.center[1],
-        mapping.center[2],
-        function() self:center() end)
-    end
-
-    if mapping.move then
-      local modal = hs.hotkey.modal.new()
-      function modal:entered() logger.i("Move Mode on") end
-      function modal:exited() logger.i("Move Mode off") end
-      hs.fnutils.each(self._movingKeys, function(move)
-        modal:bind(mapping.move[1], self._movingKeys[move], function () self:move(move) end)
-      end)
-      self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
-        mapping.move[1],
-        mapping.move[2],
-        function() modal:enter() end,
-        function() modal:exit() end)
-    end
-
-    if mapping.resize then
-      local modal = hs.hotkey.modal.new()
-      function modal:entered() logger.i("Resize Mode on") end
-      function modal:exited() logger.i("Resize Mode off") end
-      local map = { left = 'thinner', right = 'wider', down = 'shorter', up = 'taller' }
-      for move,resize in pairs(map) do
-        modal:bind(mapping.move[1], move, function () self:resize(resize) end)
-      end
-      self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
-        mapping.resize[1],
-        mapping.resize[2],
-        function() modal:enter() end,
-        function() modal:exit() end)
-    end
+  -- `center` hotkey
+  if mapping.center then
+    self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
+      mapping.center[1],
+      mapping.center[2],
+      function() self:center() end)
+  end
 
     hs.hotkey.bind(
       {"ctrl", "alt", "cmd"},
@@ -582,8 +555,43 @@ function obj:bindHotkeys(mapping)
         logger.i('window id: ' .. tostring(frontmostWindow():id()))
         logger.i('windows: ' .. hs.inspect(self._originalPositionStore['fullscreen']))
       end)
-
+  -- `move` modifier
+  if mapping.move then
+    local modal = hs.hotkey.modal.new()
+    function modal.entered(_) logger.i("Move Mode on") end
+    function modal.exited(_)  logger.i("Move Mode off") end
+    hs.fnutils.each(self._movingKeys, function(move)
+      modal:bind(mapping.move[1], self._movingKeys[move],
+                 function() self:move(move); growFullyModals[move]:enter() end,
+                 function()                  growFullyModals[move]:exit()  end)
+    end)
+    self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
+      mapping.move[1],
+      mapping.move[2],
+      function() modal:enter() end,
+      function() modal:exit()  end)
   end
+
+  -- `resize` modifier
+  if mapping.resize then
+    local modal = hs.hotkey.modal.new()
+    function modal:entered() logger.i("Resize Mode on")  end
+    function modal:exited()  logger.i("Resize Mode off") end
+    local map = { left = 'thinner', right = 'wider', down = 'shorter', up = 'taller' }
+    local mapR = {}; for k,v in pairs(map) do mapR[v] = k end
+    for move,resize in pairs(map) do
+      modal:bind(mapping.move[1], move,
+                 function() self:resize(resize); growFullyModals[mapR[resize]]:enter() end,
+                 function() growFullyModals[mapR[resize]]:exit() end)
+    end
+    self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
+      mapping.resize[1],
+      mapping.resize[2],
+      function() modal:enter() end,
+      function() modal:exit() end)
+  end
+
+end
 
 --- MiroWindowsManager:init()
 --- Method
