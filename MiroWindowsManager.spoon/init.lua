@@ -30,6 +30,7 @@
 ---
 
 -- ## TODO
+-- sticky sides option when shrinking windows
 -- different sizes lists for specific apps
 
 local obj={}
@@ -119,6 +120,7 @@ for _,move in ipairs(obj._directions) do
 end
 
 obj._originalPositionStore = { fullscreen = {} }
+setmetatable(obj._originalPositionStore, {__mode = 'kv'})  -- weak table, so it doesn't become a memory hog
 
 obj._lastSeq = {}
 obj._lastFullscreenSeq = nil
@@ -152,6 +154,12 @@ local function frontmostCell()
   return hs.grid.get(win, win:screen())
 end
 
+-- Set window to cell
+local function setPosition(cell)
+  local win = frontmostWindow()
+  hs.grid.set(win, cell, win:screen())
+end
+
 -- ## Public
 
 --- MiroWindowsManager:move(side)
@@ -165,9 +173,10 @@ end
 ---  * The MiroWindowsManager object
 function obj:move(side)
   if self:currentlyBound(side) and not self.pushToNextScreen then
-    logger.i("`self.pushToNextScreen` == false so not moving to ".. side .." screen.")
+    logger.d("`self.pushToNextScreen` == false so not moving to ".. side .." screen.")
   else
     logger.i('Moving '.. side)
+
     hs.grid['pushWindow'.. titleCase(side)](frontmostWindow())
   end
   return self
@@ -183,7 +192,7 @@ end
 --- Returns:
 ---  * The MiroWindowsManager object
 function obj:resize(growth)
-  logger.i('resize ' .. growth)
+  logger.i('Resizing '.. growth)
 
   local w = frontmostWindow()
   local fr = w:frame()
@@ -210,10 +219,12 @@ end
 --- Returns:
 ---  * The MiroWindowsManager object
 function obj:growFully(dimension)
+  logger.i('Growing '.. dimension)
+
   local cell = frontmostCell()
   cell[dimension == 'h' and 'y' or 'x'] = 0
   cell[dimension] = self.GRID[dimension]
-  self._setPosition(cell)
+  setPosition(cell)
   return self
 end
 
@@ -232,13 +243,12 @@ function obj:go(move)
   local cell = frontmostCell()
   local seq = self:currentSeq(move)  -- current sequence index or 0 if out of sequence
 
-    logger.i("We're at ".. move .." sequence ".. tostring(seq) .." (".. cell.string ..")")
+  logger.d("We're at ".. move .." sequence ".. tostring(seq) .." (".. cell.string ..")")
 
-    seq = seq % #self.sizes  -- if at end of #self.sizes then wrap to 0
-    logger.i("Updating seq to " .. tostring(seq + 1) .." (size: ".. tostring(self.sizes[seq + 1]) ..")")
+  seq = seq % #self.sizes  -- if at end of #self.sizes then wrap to 0
+  logger.d("Updating seq to " .. tostring(seq + 1) .." (size: ".. tostring(self.sizes[seq + 1]) ..")")
 
-    self:setToSeq(move, seq + 1)
-  end
+  self:setToSeq(move, seq + 1)
   return self
 end
 
@@ -253,11 +263,11 @@ end
 ---  * The MiroWindowsManager object
 function obj:fullscreen()
   local seq = self:currentFullscreenSeq()  -- current sequence index or 0 if out of sequence
-  logger.i("We're at fullscreen sequence ".. tostring(seq) .." (".. frontmostCell().string ..")")
+  logger.d("We're at fullscreen sequence ".. tostring(seq) .." (".. frontmostCell().string ..")")
 
   if seq == 0 then
     if hs.fnutils.contains(self.fullScreenSizes, 'c') then
-      logger.i("Since we are at seq 0, storing current position to use it with 'c' for window " ..
+      logger.d("Since we are at seq 0, storing current position to use it with 'c' for window " ..
                frontmostWindow():id())
       self._originalPositionStore['fullscreen'][frontmostWindow():id()] = frontmostCell()
     end
@@ -265,10 +275,10 @@ function obj:fullscreen()
 
   -- if seq = #self.fullScreenSizes then 0 so next seq = 1 (we cycle through sizes)
   seq = seq % #self.fullScreenSizes + 1
-  logger.i("Updating seq to " .. tostring(seq) .." (size: ".. tostring(self.fullScreenSizes[seq]) ..")")
+  logger.d("Updating seq to " .. tostring(seq) .." (size: ".. tostring(self.fullScreenSizes[seq]) ..")")
 
   if self.fullScreenSizes[seq] == 'c' then
-    logger.i("Seq is 'c' but we don't have a saved position, skip to the next one")
+    logger.d("Seq is 'c' but we don't have a saved position, skip to the next one")
     if not self._originalPositionStore['fullscreen'][frontmostWindow():id()] then
       seq = seq % #self.fullScreenSizes + 1
     end
@@ -289,9 +299,11 @@ end
 --- Returns:
 ---  * The MiroWindowsManager object
 function obj:center()
+  logger.i('Centering')
+
   local cell = frontmostCell()
   cell.center = self.GRID.cell().center
-  self._setPosition(cell)
+  setPosition(cell)
   return self
 end
 
@@ -340,7 +352,7 @@ function obj:setToSeq(move, seq)
 
   cell = self:snap_to_grid(cell)
 
-  self._setPosition(cell)
+  setPosition(cell)
   self._lastSeq[move] = seq
   return self
 end
@@ -380,7 +392,7 @@ function obj:currentFullscreenSeq()
   if self._lastFullscreenSeq and  -- if there is a saved last matched seq, and
       self.fullScreenSizes[self._lastFullscreenSeq] and -- it's (still) a valid index to fullScreenSizes
       cell == self:getFullscreenCell(self._lastFullscreenSeq) then -- last matched seq is same as the current fullscreen
-    logger.i('last matched seq is same as current cell, so returning seq = ' .. tostring(self._lastFullscreenSeq))
+    logger.d('last matched seq is same as current cell, so returning seq = ' .. tostring(self._lastFullscreenSeq))
     return self._lastFullscreenSeq
   else
     self._lastFullscreenSeq = nil -- cleanup if the last matched seq doesn't match the frontmost
@@ -388,9 +400,9 @@ function obj:currentFullscreenSeq()
 
   -- trying to see which fullscreen size is the current window
   for i = 1,#self.fullScreenSizes do
-    logger.i('analyze seq = ' .. tostring(i))
+    logger.d('analyze seq = ' .. tostring(i))
     if cell == self:getFullscreenCell(i) then
-      logger.i('cell == self:getFullscreenCell(seq)')
+      logger.d('cell == self:getFullscreenCell(seq)')
       return i
     end
   end
@@ -402,7 +414,7 @@ end
 
 -- Set fullscreen sequence
 function obj:setToFullscreenSeq(seq)
-  self._setPosition(self:getFullscreenCell(seq))
+  setPosition(self:getFullscreenCell(seq))
 
   if self.fullScreenSizes[seq] == 'c' then
     -- we want to use the value only once and then discard it
@@ -423,8 +435,8 @@ function obj:getFullscreenCell(seq)
     return self._originalPositionStore['fullscreen'][frontmostWindow():id()]
   end
 
-  logger.i('window id: ' .. tostring(frontmostWindow():id()))
-  logger.i('windows: ' .. hs.inspect(self._originalPositionStore['fullscreen']))
+  logger.d('window id: ' .. tostring(frontmostWindow():id()))
+  logger.d('windows: ' .. hs.inspect(self._originalPositionStore['fullscreen']))
 
   size = hs.geometry.size(
     self.GRID.w / seq_factor,
@@ -436,12 +448,6 @@ function obj:getFullscreenCell(seq)
     )
 
   return self:snap_to_grid(hs.geometry(pnt, size))
-end
-
--- Set window to cell
-function obj._setPosition(cell)
-  local win = frontmostWindow()
-  hs.grid.set(win, cell, win:screen())
 end
 
 
@@ -548,13 +554,6 @@ function obj:bindHotkeys(mapping)
       function() self:center() end)
   end
 
-    hs.hotkey.bind(
-      {"ctrl", "alt", "cmd"},
-      "l",
-      function ()
-        logger.i('window id: ' .. tostring(frontmostWindow():id()))
-        logger.i('windows: ' .. hs.inspect(self._originalPositionStore['fullscreen']))
-      end)
   -- `move` modifier
   if mapping.move then
     local modal = hs.hotkey.modal.new()
@@ -582,7 +581,7 @@ function obj:bindHotkeys(mapping)
     for move,resize in pairs(map) do
       modal:bind(mapping.move[1], move,
                  function() self:resize(resize); growFullyModals[mapR[resize]]:enter() end,
-                 function() growFullyModals[mapR[resize]]:exit() end)
+                 function()                      growFullyModals[mapR[resize]]:exit()  end)
     end
     self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
       mapping.resize[1],

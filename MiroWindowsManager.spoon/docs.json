@@ -15,13 +15,11 @@
         "stripped_doc" : [
           "The sizes that the window can have.  ",
           "The sizes are expressed as dividend of the entire screen's size.  ",
-          "For example `{2, 3, 3\/2}` means that it can be 1\/2, 1\/3 and 2\/3 of the total",
-          "screen's size.  ",
-          "Ensuring that these numbers all divide both dimensions of",
-          "MiroWindowsManager.GRID to give integers makes everything work better."
+          "For example `{2, 3, 3\/2}` means that it can be 1\/2, 1\/3 and 2\/3 of the total screen's size.  ",
+          "Make sure that these numbers divide both dimensions of MiroWindowsManager.GRID to give integers."
         ],
+        "doc" : "The sizes that the window can have.  \nThe sizes are expressed as dividend of the entire screen's size.  \nFor example `{2, 3, 3\/2}` means that it can be 1\/2, 1\/3 and 2\/3 of the total screen's size.  \nMake sure that these numbers divide both dimensions of MiroWindowsManager.GRID to give integers.",
         "desc" : "The sizes that the window can have.",
-        "doc" : "The sizes that the window can have.  \nThe sizes are expressed as dividend of the entire screen's size.  \nFor example `{2, 3, 3\/2}` means that it can be 1\/2, 1\/3 and 2\/3 of the total\nscreen's size.  \nEnsuring that these numbers all divide both dimensions of\nMiroWindowsManager.GRID to give integers makes everything work better.",
         "notes" : [
 
         ],
@@ -40,15 +38,12 @@
         "stripped_doc" : [
           "The sizes that the window can have in full-screen.  ",
           "The sizes are expressed as dividend of the entire screen's size.  ",
-          "For example `{1, 4\/3, 2}` means that it can be 1\/1 (hence full screen), 3\/4",
-          "and 1\/2 of the total screen's size.  ",
-          "Ensuring that these numbers all divide both dimensions of",
-          "MiroWindowsManager.GRID to give integers makes everything work better.  ",
-          "Special: Use 'c' for the original size and shape of the window before",
-          "starting to move it, but centered."
+          "For example `{1, 4\/3, 2}` means that it can be 1\/1 (hence full screen), 3\/4 and 1\/2 of the total screen's size.  ",
+          "Make sure that these numbers divide both dimensions of MiroWindowsManager.GRID to give integers.",
+          "Use 'c' for the original size and shape of the window before starting to move it."
         ],
+        "doc" : "The sizes that the window can have in full-screen.  \nThe sizes are expressed as dividend of the entire screen's size.  \nFor example `{1, 4\/3, 2}` means that it can be 1\/1 (hence full screen), 3\/4 and 1\/2 of the total screen's size.  \nMake sure that these numbers divide both dimensions of MiroWindowsManager.GRID to give integers.\nUse 'c' for the original size and shape of the window before starting to move it.",
         "desc" : "The sizes that the window can have in full-screen.",
-        "doc" : "The sizes that the window can have in full-screen.  \nThe sizes are expressed as dividend of the entire screen's size.  \nFor example `{1, 4\/3, 2}` means that it can be 1\/1 (hence full screen), 3\/4\nand 1\/2 of the total screen's size.  \nEnsuring that these numbers all divide both dimensions of\nMiroWindowsManager.GRID to give integers makes everything work better.  \nSpecial: Use 'c' for the original size and shape of the window before\nstarting to move it, but centered.",
         "notes" : [
 
         ],
@@ -66,12 +61,11 @@
         "def" : "MiroWindowsManager.GRID",
         "stripped_doc" : [
           "The screen's grid size.  ",
-          "Ensuring that the numbers in MiroWindowsManager.sizes and",
-          "MiroWindowsManager.fullScreenSizes divide these numbers to give integers",
-          "makes everything work better."
+          "Make sure that the numbers in MiroWindowsManager.sizes and MiroWindowsManager.fullScreenSizes divide h and w to give",
+          "integers."
         ],
+        "doc" : "The screen's grid size.  \nMake sure that the numbers in MiroWindowsManager.sizes and MiroWindowsManager.fullScreenSizes divide h and w to give\nintegers.",
         "desc" : "The screen's grid size.",
-        "doc" : "The screen's grid size.  \nEnsuring that the numbers in MiroWindowsManager.sizes and\nMiroWindowsManager.fullScreenSizes divide these numbers to give integers\nmakes everything work better.",
         "notes" : [
 
         ],
@@ -86,22 +80,42 @@
         ]
       },
       {
-        "def" : "MiroWindowsManager.moveToNextScreen",
+        "def" : "MiroWindowsManager.pushToNextScreen",
         "stripped_doc" : [
-          "Boolean value to decide wether or not to move the window on the next screen",
-          "if the window is moved the screen edge."
+          "Boolean value to decide wether or not to move the window on the next screen if the window is moved the screen edge."
         ],
-        "desc" : "Boolean value to decide wether or not to move the window on the next screen",
-        "doc" : "Boolean value to decide wether or not to move the window on the next screen\nif the window is moved the screen edge.",
+        "doc" : "Boolean value to decide wether or not to move the window on the next screen if the window is moved the screen edge.",
+        "desc" : "Boolean value to decide wether or not to move the window on the next screen if the window is moved the screen edge.",
         "notes" : [
 
         ],
-        "signature" : "MiroWindowsManager.moveToNextScreen",
+        "signature" : "MiroWindowsManager.pushToNextScreen",
         "type" : "Variable",
         "returns" : [
 
         ],
-        "name" : "moveToNextScreen",
+        "name" : "pushToNextScreen",
+        "parameters" : [
+
+        ]
+      },
+      {
+        "def" : "MiroWindowsManager.resizeRate",
+        "stripped_doc" : [
+          "Float value to decide the rate at which to resize windows. A value of 1.05 means that the window is made",
+          "taller\/wider (or shorter\/thinner) in 5% increments."
+        ],
+        "doc" : "Float value to decide the rate at which to resize windows. A value of 1.05 means that the window is made\ntaller\/wider (or shorter\/thinner) in 5% increments.",
+        "desc" : "Float value to decide the rate at which to resize windows. A value of 1.05 means that the window is made",
+        "notes" : [
+
+        ],
+        "signature" : "MiroWindowsManager.resizeRate",
+        "type" : "Variable",
+        "returns" : [
+
+        ],
+        "name" : "resizeRate",
         "parameters" : [
 
         ]
@@ -114,13 +128,11 @@
 
     ],
     "type" : "Module",
-    "desc" : "With this Spoon you will be able to move the window in halves and in",
+    "desc" : "With this Spoon you will be able to move the window in halves and in corners using your keyboard and mainly using",
     "Constructor" : [
 
     ],
-    "Field" : [
-
-    ],
+    "doc" : "With this Spoon you will be able to move the window in halves and in corners using your keyboard and mainly using\narrows. You would also be able to resize them by thirds, quarters, or halves.  \nOfficial homepage for more info and documentation:\n[https:\/\/github.com\/miromannino\/miro-windows-manager](https:\/\/github.com\/miromannino\/miro-windows-manager)\n\nNOTE: This Spoon sets `hs.grid` globals with `hs.grid.setGrid()`, `hs.grid.MARGINX`, and `hs.grid.MARGINY`.\nChanging MiroWindowsManager.GRID will change these globals.\n\nDownload:\nhttps:\/\/github.com\/miromannino\/miro-windows-manager\/raw\/master\/MiroWindowsManager.spoon.zip",
     "Method" : [
       {
         "def" : "MiroWindowsManager:move(side)",
@@ -128,8 +140,8 @@
           "Move the frontmost window up, down, left, right.  ",
           ""
         ],
-        "desc" : "Move the frontmost window up, down, left, right.",
         "doc" : "Move the frontmost window up, down, left, right.  \n\nParameters:\n * side - 'up', 'down', 'left', or 'right'\n\nReturns:\n * The MiroWindowsManager object",
+        "desc" : "Move the frontmost window up, down, left, right.",
         "notes" : [
 
         ],
@@ -145,13 +157,35 @@
         ]
       },
       {
-        "def" : "MiroWindowsManager:growFully(growth)",
+        "def" : "MiroWindowsManager:resize(growth)",
         "stripped_doc" : [
-          "Grow the frontmost window to full width \/ height taller, wider.  ",
+          "Resize the frontmost window taller, shorter, wider, or thinner.",
           ""
         ],
-        "desc" : "Grow the frontmost window to full width \/ height taller, wider.",
-        "doc" : "Grow the frontmost window to full width \/ height taller, wider.  \n\nParameters:\n * growth - 'taller', or 'wider'\n\nReturns:\n * The MiroWindowsManager object",
+        "doc" : "Resize the frontmost window taller, shorter, wider, or thinner.\n\nParameters:\n * growth - 'taller', 'shorter', 'wider', or 'thinner'\n\nReturns:\n * The MiroWindowsManager object",
+        "desc" : "Resize the frontmost window taller, shorter, wider, or thinner.",
+        "notes" : [
+
+        ],
+        "signature" : "MiroWindowsManager:resize(growth)",
+        "type" : "Method",
+        "returns" : [
+          " * The MiroWindowsManager object"
+        ],
+        "name" : "resize",
+        "parameters" : [
+          " * growth - 'taller', 'shorter', 'wider', or 'thinner'",
+          ""
+        ]
+      },
+      {
+        "def" : "MiroWindowsManager:growFully(growth)",
+        "stripped_doc" : [
+          "Grow the frontmost window to full width \/ height.",
+          ""
+        ],
+        "doc" : "Grow the frontmost window to full width \/ height.\n\nParameters:\n * dimension - 'h', or 'w'\n\nReturns:\n * The MiroWindowsManager object",
+        "desc" : "Grow the frontmost window to full width \/ height.",
         "notes" : [
 
         ],
@@ -162,7 +196,7 @@
         ],
         "name" : "growFully",
         "parameters" : [
-          " * growth - 'taller', or 'wider'",
+          " * dimension - 'h', or 'w'",
           ""
         ]
       },
@@ -173,8 +207,8 @@
           "Tap both directions to go full width \/ height.  ",
           ""
         ],
+        "doc" : "Move to screen edge, or cycle to next horizontal or vertical size if already there.  \nTap both directions to go full width \/ height.  \n\nParameters:\n * move - 'up', 'down', 'left', or 'right'\n\nReturns:\n * The MiroWindowsManager object",
         "desc" : "Move to screen edge, or cycle to next horizontal or vertical size if already there.",
-        "doc" : "Move to screen edge, or cycle to next horizontal or vertical size if already there.  \nTap both directions to go full width \/ height.  \n\nParameters:\n * move - 'up', 'down', 'left', 'right'\n\nReturns:\n * The MiroWindowsManager object",
         "notes" : [
 
         ],
@@ -185,7 +219,7 @@
         ],
         "name" : "go",
         "parameters" : [
-          " * move - 'up', 'down', 'left', 'right'",
+          " * move - 'up', 'down', 'left', or 'right'",
           ""
         ]
       },
@@ -195,8 +229,8 @@
           "Fullscreen, or cycle to next fullscreen option",
           ""
         ],
-        "desc" : "Fullscreen, or cycle to next fullscreen option",
         "doc" : "Fullscreen, or cycle to next fullscreen option\n\nParameters:\n * None.\n\nReturns:\n * The MiroWindowsManager object",
+        "desc" : "Fullscreen, or cycle to next fullscreen option",
         "notes" : [
 
         ],
@@ -217,8 +251,8 @@
           "Center",
           ""
         ],
-        "desc" : "Center",
         "doc" : "Center\n\nParameters:\n * None.\n\nReturns:\n * The MiroWindowsManager object",
+        "desc" : "Center",
         "notes" : [
 
         ],
@@ -239,8 +273,8 @@
           "Binds hotkeys for Miro's Windows Manager",
           ""
         ],
+        "doc" : "Binds hotkeys for Miro's Windows Manager\n\nParameters:\n * mapping - A table containing hotkey details for the following items:\n  * left: for the left action (usually `{hyper, \"left\"}`)\n  * right: for the right action (usually `{hyper, \"right\"}`)\n  * up: for the up action (usually {hyper, \"up\"})\n  * down: for the down action (usually `{hyper, \"down\"}`)\n  * fullscreen: for the full-screen action (e.g. `{hyper, \"f\"}`)\n  * center: for the center action (e.g. `{hyper, \"c\"}`)\n  * move: for the move action (e.g. `{hyper, \"v\"}`). The move action is active as soon as the hotkey is pressed.\n      While active the left, right, up or down keys can be used (these are configured by the actions above). \n  * resize: for the resize action (e.g. `{hyper, \"d\"}`). The resize action is active as soon as the hotkey is\n      pressed. While active the left, right, up or down keys can be used (these are configured by the actions\n      above).\n\nA configuration example:\n``` lua\nlocal hyper = {\"ctrl\", \"alt\", \"cmd\"}\nspoon.MiroWindowsManager:bindHotkeys({\n  up          = {hyper, \"up\"},\n  down        = {hyper, \"down\"},\n  left        = {hyper, \"left\"},\n  right       = {hyper, \"right\"},\n  fullscreen  = {hyper, \"f\"},\n  center      = {hyper, \"c\"},\n  move        = {hyper, \"v\"},\n  resize      = {hyper, \"d\" }\n})\n```\n\nIn this example ctrl+alt+cmd+up will perform the 'up' action.\nPressing ctrl+alt+cmd+c the window will be centered.\nPressing ctrl+alt+cmd+f the window will be maximized.\nKeeping ctrl+alt+cmd+v pressed you can move the window using the arrow keys up, down, left, and right.\nKeeping ctrl+alt+cmd+d pressed you can resize the window using the arrow keys up, down, left, and right.",
         "desc" : "Binds hotkeys for Miro's Windows Manager",
-        "doc" : "Binds hotkeys for Miro's Windows Manager\n\nParameters:\n * mapping - A table containing hotkey details for the following items:\n  * left: for the left action (usually `{hyper, \"left\"}`)\n  * right: for the right action (usually `{hyper, \"right\"}`)\n  * up: for the up action (usually {hyper, \"up\"})\n  * down: for the down action (usually `{hyper, \"down\"}`)\n  * fullscreen: for the full-screen action (e.g. `{hyper, \"f\"}`)\n\nA configuration example can be:\n``` lua\nlocal mods = {\"ctrl\", \"alt\", \"cmd\"}\nspoon.MiroWindowsManager:bindHotkeys({\n  up          = {mods, \"up\"},\n  down        = {mods, \"down\"},\n  left        = {mods, \"left\"},\n  right       = {mods, \"right\"},\n  fullscreen  = {mods, \"f\"},\n  center      = {mods, \"c\"},\n  move        = {mods, \"v\"},\n  resize      = {mods, \"d\"}\n})\n```",
         "notes" : [
 
         ],
@@ -257,30 +291,42 @@
           "  * up: for the up action (usually {hyper, \"up\"})",
           "  * down: for the down action (usually `{hyper, \"down\"}`)",
           "  * fullscreen: for the full-screen action (e.g. `{hyper, \"f\"}`)",
+          "  * center: for the center action (e.g. `{hyper, \"c\"}`)",
+          "  * move: for the move action (e.g. `{hyper, \"v\"}`). The move action is active as soon as the hotkey is pressed.",
+          "      While active the left, right, up or down keys can be used (these are configured by the actions above). ",
+          "  * resize: for the resize action (e.g. `{hyper, \"d\"}`). The resize action is active as soon as the hotkey is",
+          "      pressed. While active the left, right, up or down keys can be used (these are configured by the actions",
+          "      above).",
           "",
-          "A configuration example can be:",
+          "A configuration example:",
           "``` lua",
-          "local mods = {\"ctrl\", \"alt\", \"cmd\"}",
+          "local hyper = {\"ctrl\", \"alt\", \"cmd\"}",
           "spoon.MiroWindowsManager:bindHotkeys({",
-          "  up          = {mods, \"up\"},",
-          "  down        = {mods, \"down\"},",
-          "  left        = {mods, \"left\"},",
-          "  right       = {mods, \"right\"},",
-          "  fullscreen  = {mods, \"f\"},",
-          "  center      = {mods, \"c\"},",
-          "  move        = {mods, \"v\"},",
-          "  resize      = {mods, \"d\"}",
+          "  up          = {hyper, \"up\"},",
+          "  down        = {hyper, \"down\"},",
+          "  left        = {hyper, \"left\"},",
+          "  right       = {hyper, \"right\"},",
+          "  fullscreen  = {hyper, \"f\"},",
+          "  center      = {hyper, \"c\"},",
+          "  move        = {hyper, \"v\"},",
+          "  resize      = {hyper, \"d\" }",
           "})",
-          "```"
+          "```",
+          "",
+          "In this example ctrl+alt+cmd+up will perform the 'up' action.",
+          "Pressing ctrl+alt+cmd+c the window will be centered.",
+          "Pressing ctrl+alt+cmd+f the window will be maximized.",
+          "Keeping ctrl+alt+cmd+v pressed you can move the window using the arrow keys up, down, left, and right.",
+          "Keeping ctrl+alt+cmd+d pressed you can resize the window using the arrow keys up, down, left, and right."
         ]
       },
       {
         "def" : "MiroWindowsManager:init()",
         "stripped_doc" : [
-
+          "Currently does nothing (implemented so that treating this Spoon like others won't cause errors)."
         ],
-        "desc" : "UNKNOWN DESC",
-        "doc" : "",
+        "doc" : "Currently does nothing (implemented so that treating this Spoon like others won't cause errors).",
+        "desc" : "Currently does nothing (implemented so that treating this Spoon like others won't cause errors).",
         "notes" : [
 
         ],
@@ -298,18 +344,16 @@
     "Command" : [
 
     ],
-    "doc" : "With this Spoon you will be able to move the window in halves and in\ncorners using your keyboard and mainly using arrows. You would also be able\nto resize them by thirds, quarters, or halves.  \nOfficial homepage for more info and documentation:\n[https:\/\/github.com\/miromannino\/miro-windows-manager](https:\/\/github.com\/miromannino\/miro-windows-manager)\n\nNOTE: This Spoon sets `hs.grid` globals with `hs.grid.setGrid()`,\n`hs.grid.MARGINX`, and `hs.grid.MARGINY`. Changing MiroWindowsManager.GRID\nwill change these globals.\n\nDownload:\nhttps:\/\/github.com\/miromannino\/miro-windows-manager\/raw\/master\/MiroWindowsManager.spoon.zip",
     "items" : [
       {
         "def" : "MiroWindowsManager.GRID",
         "stripped_doc" : [
           "The screen's grid size.  ",
-          "Ensuring that the numbers in MiroWindowsManager.sizes and",
-          "MiroWindowsManager.fullScreenSizes divide these numbers to give integers",
-          "makes everything work better."
+          "Make sure that the numbers in MiroWindowsManager.sizes and MiroWindowsManager.fullScreenSizes divide h and w to give",
+          "integers."
         ],
+        "doc" : "The screen's grid size.  \nMake sure that the numbers in MiroWindowsManager.sizes and MiroWindowsManager.fullScreenSizes divide h and w to give\nintegers.",
         "desc" : "The screen's grid size.",
-        "doc" : "The screen's grid size.  \nEnsuring that the numbers in MiroWindowsManager.sizes and\nMiroWindowsManager.fullScreenSizes divide these numbers to give integers\nmakes everything work better.",
         "notes" : [
 
         ],
@@ -328,15 +372,12 @@
         "stripped_doc" : [
           "The sizes that the window can have in full-screen.  ",
           "The sizes are expressed as dividend of the entire screen's size.  ",
-          "For example `{1, 4\/3, 2}` means that it can be 1\/1 (hence full screen), 3\/4",
-          "and 1\/2 of the total screen's size.  ",
-          "Ensuring that these numbers all divide both dimensions of",
-          "MiroWindowsManager.GRID to give integers makes everything work better.  ",
-          "Special: Use 'c' for the original size and shape of the window before",
-          "starting to move it, but centered."
+          "For example `{1, 4\/3, 2}` means that it can be 1\/1 (hence full screen), 3\/4 and 1\/2 of the total screen's size.  ",
+          "Make sure that these numbers divide both dimensions of MiroWindowsManager.GRID to give integers.",
+          "Use 'c' for the original size and shape of the window before starting to move it."
         ],
+        "doc" : "The sizes that the window can have in full-screen.  \nThe sizes are expressed as dividend of the entire screen's size.  \nFor example `{1, 4\/3, 2}` means that it can be 1\/1 (hence full screen), 3\/4 and 1\/2 of the total screen's size.  \nMake sure that these numbers divide both dimensions of MiroWindowsManager.GRID to give integers.\nUse 'c' for the original size and shape of the window before starting to move it.",
         "desc" : "The sizes that the window can have in full-screen.",
-        "doc" : "The sizes that the window can have in full-screen.  \nThe sizes are expressed as dividend of the entire screen's size.  \nFor example `{1, 4\/3, 2}` means that it can be 1\/1 (hence full screen), 3\/4\nand 1\/2 of the total screen's size.  \nEnsuring that these numbers all divide both dimensions of\nMiroWindowsManager.GRID to give integers makes everything work better.  \nSpecial: Use 'c' for the original size and shape of the window before\nstarting to move it, but centered.",
         "notes" : [
 
         ],
@@ -351,22 +392,42 @@
         ]
       },
       {
-        "def" : "MiroWindowsManager.moveToNextScreen",
+        "def" : "MiroWindowsManager.pushToNextScreen",
         "stripped_doc" : [
-          "Boolean value to decide wether or not to move the window on the next screen",
-          "if the window is moved the screen edge."
+          "Boolean value to decide wether or not to move the window on the next screen if the window is moved the screen edge."
         ],
-        "desc" : "Boolean value to decide wether or not to move the window on the next screen",
-        "doc" : "Boolean value to decide wether or not to move the window on the next screen\nif the window is moved the screen edge.",
+        "doc" : "Boolean value to decide wether or not to move the window on the next screen if the window is moved the screen edge.",
+        "desc" : "Boolean value to decide wether or not to move the window on the next screen if the window is moved the screen edge.",
         "notes" : [
 
         ],
-        "signature" : "MiroWindowsManager.moveToNextScreen",
+        "signature" : "MiroWindowsManager.pushToNextScreen",
         "type" : "Variable",
         "returns" : [
 
         ],
-        "name" : "moveToNextScreen",
+        "name" : "pushToNextScreen",
+        "parameters" : [
+
+        ]
+      },
+      {
+        "def" : "MiroWindowsManager.resizeRate",
+        "stripped_doc" : [
+          "Float value to decide the rate at which to resize windows. A value of 1.05 means that the window is made",
+          "taller\/wider (or shorter\/thinner) in 5% increments."
+        ],
+        "doc" : "Float value to decide the rate at which to resize windows. A value of 1.05 means that the window is made\ntaller\/wider (or shorter\/thinner) in 5% increments.",
+        "desc" : "Float value to decide the rate at which to resize windows. A value of 1.05 means that the window is made",
+        "notes" : [
+
+        ],
+        "signature" : "MiroWindowsManager.resizeRate",
+        "type" : "Variable",
+        "returns" : [
+
+        ],
+        "name" : "resizeRate",
         "parameters" : [
 
         ]
@@ -376,13 +437,11 @@
         "stripped_doc" : [
           "The sizes that the window can have.  ",
           "The sizes are expressed as dividend of the entire screen's size.  ",
-          "For example `{2, 3, 3\/2}` means that it can be 1\/2, 1\/3 and 2\/3 of the total",
-          "screen's size.  ",
-          "Ensuring that these numbers all divide both dimensions of",
-          "MiroWindowsManager.GRID to give integers makes everything work better."
+          "For example `{2, 3, 3\/2}` means that it can be 1\/2, 1\/3 and 2\/3 of the total screen's size.  ",
+          "Make sure that these numbers divide both dimensions of MiroWindowsManager.GRID to give integers."
         ],
+        "doc" : "The sizes that the window can have.  \nThe sizes are expressed as dividend of the entire screen's size.  \nFor example `{2, 3, 3\/2}` means that it can be 1\/2, 1\/3 and 2\/3 of the total screen's size.  \nMake sure that these numbers divide both dimensions of MiroWindowsManager.GRID to give integers.",
         "desc" : "The sizes that the window can have.",
-        "doc" : "The sizes that the window can have.  \nThe sizes are expressed as dividend of the entire screen's size.  \nFor example `{2, 3, 3\/2}` means that it can be 1\/2, 1\/3 and 2\/3 of the total\nscreen's size.  \nEnsuring that these numbers all divide both dimensions of\nMiroWindowsManager.GRID to give integers makes everything work better.",
         "notes" : [
 
         ],
@@ -402,8 +461,8 @@
           "Binds hotkeys for Miro's Windows Manager",
           ""
         ],
+        "doc" : "Binds hotkeys for Miro's Windows Manager\n\nParameters:\n * mapping - A table containing hotkey details for the following items:\n  * left: for the left action (usually `{hyper, \"left\"}`)\n  * right: for the right action (usually `{hyper, \"right\"}`)\n  * up: for the up action (usually {hyper, \"up\"})\n  * down: for the down action (usually `{hyper, \"down\"}`)\n  * fullscreen: for the full-screen action (e.g. `{hyper, \"f\"}`)\n  * center: for the center action (e.g. `{hyper, \"c\"}`)\n  * move: for the move action (e.g. `{hyper, \"v\"}`). The move action is active as soon as the hotkey is pressed.\n      While active the left, right, up or down keys can be used (these are configured by the actions above). \n  * resize: for the resize action (e.g. `{hyper, \"d\"}`). The resize action is active as soon as the hotkey is\n      pressed. While active the left, right, up or down keys can be used (these are configured by the actions\n      above).\n\nA configuration example:\n``` lua\nlocal hyper = {\"ctrl\", \"alt\", \"cmd\"}\nspoon.MiroWindowsManager:bindHotkeys({\n  up          = {hyper, \"up\"},\n  down        = {hyper, \"down\"},\n  left        = {hyper, \"left\"},\n  right       = {hyper, \"right\"},\n  fullscreen  = {hyper, \"f\"},\n  center      = {hyper, \"c\"},\n  move        = {hyper, \"v\"},\n  resize      = {hyper, \"d\" }\n})\n```\n\nIn this example ctrl+alt+cmd+up will perform the 'up' action.\nPressing ctrl+alt+cmd+c the window will be centered.\nPressing ctrl+alt+cmd+f the window will be maximized.\nKeeping ctrl+alt+cmd+v pressed you can move the window using the arrow keys up, down, left, and right.\nKeeping ctrl+alt+cmd+d pressed you can resize the window using the arrow keys up, down, left, and right.",
         "desc" : "Binds hotkeys for Miro's Windows Manager",
-        "doc" : "Binds hotkeys for Miro's Windows Manager\n\nParameters:\n * mapping - A table containing hotkey details for the following items:\n  * left: for the left action (usually `{hyper, \"left\"}`)\n  * right: for the right action (usually `{hyper, \"right\"}`)\n  * up: for the up action (usually {hyper, \"up\"})\n  * down: for the down action (usually `{hyper, \"down\"}`)\n  * fullscreen: for the full-screen action (e.g. `{hyper, \"f\"}`)\n\nA configuration example can be:\n``` lua\nlocal mods = {\"ctrl\", \"alt\", \"cmd\"}\nspoon.MiroWindowsManager:bindHotkeys({\n  up          = {mods, \"up\"},\n  down        = {mods, \"down\"},\n  left        = {mods, \"left\"},\n  right       = {mods, \"right\"},\n  fullscreen  = {mods, \"f\"},\n  center      = {mods, \"c\"},\n  move        = {mods, \"v\"},\n  resize      = {mods, \"d\"}\n})\n```",
         "notes" : [
 
         ],
@@ -420,21 +479,33 @@
           "  * up: for the up action (usually {hyper, \"up\"})",
           "  * down: for the down action (usually `{hyper, \"down\"}`)",
           "  * fullscreen: for the full-screen action (e.g. `{hyper, \"f\"}`)",
+          "  * center: for the center action (e.g. `{hyper, \"c\"}`)",
+          "  * move: for the move action (e.g. `{hyper, \"v\"}`). The move action is active as soon as the hotkey is pressed.",
+          "      While active the left, right, up or down keys can be used (these are configured by the actions above). ",
+          "  * resize: for the resize action (e.g. `{hyper, \"d\"}`). The resize action is active as soon as the hotkey is",
+          "      pressed. While active the left, right, up or down keys can be used (these are configured by the actions",
+          "      above).",
           "",
-          "A configuration example can be:",
+          "A configuration example:",
           "``` lua",
-          "local mods = {\"ctrl\", \"alt\", \"cmd\"}",
+          "local hyper = {\"ctrl\", \"alt\", \"cmd\"}",
           "spoon.MiroWindowsManager:bindHotkeys({",
-          "  up          = {mods, \"up\"},",
-          "  down        = {mods, \"down\"},",
-          "  left        = {mods, \"left\"},",
-          "  right       = {mods, \"right\"},",
-          "  fullscreen  = {mods, \"f\"},",
-          "  center      = {mods, \"c\"},",
-          "  move        = {mods, \"v\"},",
-          "  resize      = {mods, \"d\"}",
+          "  up          = {hyper, \"up\"},",
+          "  down        = {hyper, \"down\"},",
+          "  left        = {hyper, \"left\"},",
+          "  right       = {hyper, \"right\"},",
+          "  fullscreen  = {hyper, \"f\"},",
+          "  center      = {hyper, \"c\"},",
+          "  move        = {hyper, \"v\"},",
+          "  resize      = {hyper, \"d\" }",
           "})",
-          "```"
+          "```",
+          "",
+          "In this example ctrl+alt+cmd+up will perform the 'up' action.",
+          "Pressing ctrl+alt+cmd+c the window will be centered.",
+          "Pressing ctrl+alt+cmd+f the window will be maximized.",
+          "Keeping ctrl+alt+cmd+v pressed you can move the window using the arrow keys up, down, left, and right.",
+          "Keeping ctrl+alt+cmd+d pressed you can resize the window using the arrow keys up, down, left, and right."
         ]
       },
       {
@@ -443,8 +514,8 @@
           "Center",
           ""
         ],
-        "desc" : "Center",
         "doc" : "Center\n\nParameters:\n * None.\n\nReturns:\n * The MiroWindowsManager object",
+        "desc" : "Center",
         "notes" : [
 
         ],
@@ -465,8 +536,8 @@
           "Fullscreen, or cycle to next fullscreen option",
           ""
         ],
-        "desc" : "Fullscreen, or cycle to next fullscreen option",
         "doc" : "Fullscreen, or cycle to next fullscreen option\n\nParameters:\n * None.\n\nReturns:\n * The MiroWindowsManager object",
+        "desc" : "Fullscreen, or cycle to next fullscreen option",
         "notes" : [
 
         ],
@@ -488,8 +559,8 @@
           "Tap both directions to go full width \/ height.  ",
           ""
         ],
+        "doc" : "Move to screen edge, or cycle to next horizontal or vertical size if already there.  \nTap both directions to go full width \/ height.  \n\nParameters:\n * move - 'up', 'down', 'left', or 'right'\n\nReturns:\n * The MiroWindowsManager object",
         "desc" : "Move to screen edge, or cycle to next horizontal or vertical size if already there.",
-        "doc" : "Move to screen edge, or cycle to next horizontal or vertical size if already there.  \nTap both directions to go full width \/ height.  \n\nParameters:\n * move - 'up', 'down', 'left', 'right'\n\nReturns:\n * The MiroWindowsManager object",
         "notes" : [
 
         ],
@@ -500,18 +571,18 @@
         ],
         "name" : "go",
         "parameters" : [
-          " * move - 'up', 'down', 'left', 'right'",
+          " * move - 'up', 'down', 'left', or 'right'",
           ""
         ]
       },
       {
         "def" : "MiroWindowsManager:growFully(growth)",
         "stripped_doc" : [
-          "Grow the frontmost window to full width \/ height taller, wider.  ",
+          "Grow the frontmost window to full width \/ height.",
           ""
         ],
-        "desc" : "Grow the frontmost window to full width \/ height taller, wider.",
-        "doc" : "Grow the frontmost window to full width \/ height taller, wider.  \n\nParameters:\n * growth - 'taller', or 'wider'\n\nReturns:\n * The MiroWindowsManager object",
+        "doc" : "Grow the frontmost window to full width \/ height.\n\nParameters:\n * dimension - 'h', or 'w'\n\nReturns:\n * The MiroWindowsManager object",
+        "desc" : "Grow the frontmost window to full width \/ height.",
         "notes" : [
 
         ],
@@ -522,17 +593,17 @@
         ],
         "name" : "growFully",
         "parameters" : [
-          " * growth - 'taller', or 'wider'",
+          " * dimension - 'h', or 'w'",
           ""
         ]
       },
       {
         "def" : "MiroWindowsManager:init()",
         "stripped_doc" : [
-
+          "Currently does nothing (implemented so that treating this Spoon like others won't cause errors)."
         ],
-        "desc" : "UNKNOWN DESC",
-        "doc" : "",
+        "doc" : "Currently does nothing (implemented so that treating this Spoon like others won't cause errors).",
+        "desc" : "Currently does nothing (implemented so that treating this Spoon like others won't cause errors).",
         "notes" : [
 
         ],
@@ -552,8 +623,8 @@
           "Move the frontmost window up, down, left, right.  ",
           ""
         ],
-        "desc" : "Move the frontmost window up, down, left, right.",
         "doc" : "Move the frontmost window up, down, left, right.  \n\nParameters:\n * side - 'up', 'down', 'left', or 'right'\n\nReturns:\n * The MiroWindowsManager object",
+        "desc" : "Move the frontmost window up, down, left, right.",
         "notes" : [
 
         ],
@@ -567,7 +638,32 @@
           " * side - 'up', 'down', 'left', or 'right'",
           ""
         ]
+      },
+      {
+        "def" : "MiroWindowsManager:resize(growth)",
+        "stripped_doc" : [
+          "Resize the frontmost window taller, shorter, wider, or thinner.",
+          ""
+        ],
+        "doc" : "Resize the frontmost window taller, shorter, wider, or thinner.\n\nParameters:\n * growth - 'taller', 'shorter', 'wider', or 'thinner'\n\nReturns:\n * The MiroWindowsManager object",
+        "desc" : "Resize the frontmost window taller, shorter, wider, or thinner.",
+        "notes" : [
+
+        ],
+        "signature" : "MiroWindowsManager:resize(growth)",
+        "type" : "Method",
+        "returns" : [
+          " * The MiroWindowsManager object"
+        ],
+        "name" : "resize",
+        "parameters" : [
+          " * growth - 'taller', 'shorter', 'wider', or 'thinner'",
+          ""
+        ]
       }
+    ],
+    "Field" : [
+
     ],
     "name" : "MiroWindowsManager"
   }
