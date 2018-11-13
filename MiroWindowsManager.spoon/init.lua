@@ -525,8 +525,8 @@ function obj:bindHotkeys(mapping)
         mapping[direction][1],
         mapping[direction][2],
         function()
-          self:go(direction)
           growFullyModals[direction]:enter()
+          self:go(direction)
         end,
         function()
           growFullyModals[direction]:exit()
@@ -561,8 +561,8 @@ function obj:bindHotkeys(mapping)
     function modal.exited(_)  logger.i("Move Mode off") end
     hs.fnutils.each(self._movingKeys, function(move)
       modal:bind(mapping.move[1], self._movingKeys[move],
-                 function() self:move(move); growFullyModals[move]:enter() end,
-                 function()                  growFullyModals[move]:exit()  end)
+                 function() growFullyModals[move]:enter(); self:move(move) end,
+                 function() growFullyModals[move]:exit() end)
     end)
     self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
       mapping.move[1],
@@ -580,8 +580,8 @@ function obj:bindHotkeys(mapping)
     local mapR = {}; for k,v in pairs(map) do mapR[v] = k end
     for move,resize in pairs(map) do
       modal:bind(mapping.move[1], move,
-                 function() self:resize(resize); growFullyModals[mapR[resize]]:enter() end,
-                 function()                      growFullyModals[mapR[resize]]:exit()  end)
+                 function() growFullyModals[mapR[resize]]:enter(); self:resize(resize) end,
+                 function() growFullyModals[mapR[resize]]:exit() end)
     end
     self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
       mapping.resize[1],
