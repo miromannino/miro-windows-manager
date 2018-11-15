@@ -496,6 +496,13 @@ obj.hotkeys = {}
 function obj:bindHotkeys(mapping)
   logger.i("Bind Hotkeys for Miro's Windows Manager")
 
+  -- movingKeys
+  for _,direction in ipairs(self._directions) do
+    -- save the keys that the user decided to be for directions, 
+    -- generally the arrows keys, but it could be also WASD.
+    self._movingKeys[direction] = mapping[direction][2]
+  end
+
   -- `growFully` modals
   local growFullyModals = {}
   for _,direction in ipairs(self._directions) do
@@ -531,10 +538,6 @@ function obj:bindHotkeys(mapping)
         function()
           growFullyModals[direction]:exit()
         end)
-
-      -- save the keys that the user decided to be for directions, 
-      -- generally the arrows keys, but it could be also WASD.
-      self._movingKeys[direction] = mapping[direction][2]
     end
   end
 
@@ -559,11 +562,11 @@ function obj:bindHotkeys(mapping)
     local modal = hs.hotkey.modal.new()
     function modal.entered(_) logger.i("Move Mode on") end
     function modal.exited(_)  logger.i("Move Mode off") end
-    hs.fnutils.each(self._movingKeys, function(move)
-      modal:bind(mapping.move[1], self._movingKeys[move],
+    for move,key in pairs(self._movingKeys) do
+      modal:bind(mapping.move[1], key,
                  function() growFullyModals[move]:enter(); self:move(move) end,
                  function() growFullyModals[move]:exit() end)
-    end)
+    end
     self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
       mapping.move[1],
       mapping.move[2],
@@ -578,10 +581,11 @@ function obj:bindHotkeys(mapping)
     function modal:exited()  logger.i("Resize Mode off") end
     local map = { left = 'thinner', right = 'wider', down = 'shorter', up = 'taller' }
     local mapR = {}; for k,v in pairs(map) do mapR[v] = k end
-    for move,resize in pairs(map) do
-      modal:bind(mapping.move[1], move,
-                 function() growFullyModals[mapR[resize]]:enter(); self:resize(resize) end,
-                 function() growFullyModals[mapR[resize]]:exit() end)
+    for move,key in pairs(self._movingKeys) do
+      hs.printf("move: %s, map[m]: %s, mapR[m]: %s", move, map[move], mapR[move])
+      modal:bind(mapping.move[1], key,
+                 function() growFullyModals[move]:enter(); self:resize(map[move]) end,
+                 function() growFullyModals[move]:exit() end)
     end
     self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
       mapping.resize[1],
