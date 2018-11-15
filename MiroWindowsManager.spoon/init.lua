@@ -565,7 +565,8 @@ function obj:bindHotkeys(mapping)
     for move,key in pairs(self._movingKeys) do
       modal:bind(mapping.move[1], key,
                  function() growFullyModals[move]:enter(); self:move(move) end,
-                 function() growFullyModals[move]:exit() end)
+                 function() growFullyModals[move]:exit() end,
+                 function() self:move(move) end)
     end
     self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
       mapping.move[1],
@@ -585,7 +586,8 @@ function obj:bindHotkeys(mapping)
       hs.printf("move: %s, map[m]: %s, mapR[m]: %s", move, map[move], mapR[move])
       modal:bind(mapping.move[1], key,
                  function() growFullyModals[move]:enter(); self:resize(map[move]) end,
-                 function() growFullyModals[move]:exit() end)
+                 function() growFullyModals[move]:exit() end,
+                 function() self:resize(map[move]) end)
     end
     self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
       mapping.resize[1],
