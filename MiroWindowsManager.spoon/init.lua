@@ -581,9 +581,7 @@ function obj:bindHotkeys(mapping)
     function modal:entered() logger.i("Resize Mode on")  end
     function modal:exited()  logger.i("Resize Mode off") end
     local map = { left = 'thinner', right = 'wider', down = 'shorter', up = 'taller' }
-    local mapR = {}; for k,v in pairs(map) do mapR[v] = k end
     for move,key in pairs(self._movingKeys) do
-      hs.printf("move: %s, map[m]: %s, mapR[m]: %s", move, map[move], mapR[move])
       modal:bind(mapping.move[1], key,
                  function() growFullyModals[move]:enter(); self:resize(map[move]) end,
                  function() growFullyModals[move]:exit() end,
