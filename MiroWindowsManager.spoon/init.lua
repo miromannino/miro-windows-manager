@@ -17,8 +17,7 @@
 
 --- === MiroWindowsManager ===
 ---
---- With this Spoon you will be able to move the window in halves and in corners using your keyboard and mainly using
---- arrows. You would also be able to resize them by thirds, quarters, or halves.  
+--- With this Spoon you will be able to move the window in halves and in corners using your keyboard and mainly using arrows. You would also be able to resize them by thirds, quarters, or halves.  
 --- Official homepage for more info and documentation:
 --- [https://github.com/miromannino/miro-windows-manager](https://github.com/miromannino/miro-windows-manager)
 --- 
@@ -68,16 +67,14 @@ obj.sizes = {2, 3, 3/2}
 obj.fullScreenSizes = {1, 2, 'c'}
 
 -- Comment: Lots of work here to save users a little work. Previous versions required users to call
--- MiroWindowsManager:start() every time they changed GRID. The metatable work here watches for those changes and does
--- the work :start() would have done.
+-- MiroWindowsManager:start() every time they changed GRID. The metatable work here watches for those changes and does the work :start() would have done.
 package.path = package.path..";Spoons/".. ... ..".spoon/?.lua"
 require('extend_GRID').extend(obj, logger)
 
 --- MiroWindowsManager.GRID
 --- Variable
 --- The screen's grid size.  
---- Make sure that the numbers in MiroWindowsManager.sizes and MiroWindowsManager.fullScreenSizes divide h and w to give
---- integers.
+--- Make sure that the numbers in MiroWindowsManager.sizes and MiroWindowsManager.fullScreenSizes divide h and w to give integers.
 obj.GRID = { w = 24, h = 24, margins = hs.geometry.point(0,0) }
 function obj.GRID.cell()
   return hs.geometry(obj.GRID.margins, hs.geometry.size(obj.GRID.w, obj.GRID.h))
@@ -86,14 +83,13 @@ end
 
 --- MiroWindowsManager.pushToNextScreen
 --- Variable
---- Boolean value to decide wether or not to move the window on the next screen if the window is moved the screen edge.
+--- Boolean value to decide whether or not to move the window on the next screen if the window is moved the screen edge.
 obj.pushToNextScreen = false
 
 
 --- MiroWindowsManager.resizeRate
 --- Variable
---- Float value to decide the rate at which to resize windows. A value of 1.05 means that the window is made
---- taller/wider (or shorter/thinner) in 5% increments.
+--- Float value to decide the rate at which to resize windows. A value of 1.05 means that the window is made taller/wider (or shorter/thinner) in 5% increments.
 obj.resizeRate = 1.05
 
 -- ## Internal
@@ -467,11 +463,8 @@ obj.hotkeys = {}
 ---   * down: for the down action (usually `{hyper, "down"}`)
 ---   * fullscreen: for the full-screen action (e.g. `{hyper, "f"}`)
 ---   * center: for the center action (e.g. `{hyper, "c"}`)
----   * move: for the move action (e.g. `{hyper, "v"}`). The move action is active as soon as the hotkey is pressed.
----       While active the left, right, up or down keys can be used (these are configured by the actions above). 
----   * resize: for the resize action (e.g. `{hyper, "d"}`). The resize action is active as soon as the hotkey is
----       pressed. While active the left, right, up or down keys can be used (these are configured by the actions
----       above).
+---   * move: for the move action (e.g. `{hyper, "v"}`). The move action is active as soon as the hotkey is pressed. While active the left, right, up or down keys can be used (these are configured by the actions above). 
+---   * resize: for the resize action (e.g. `{hyper, "d"}`). The resize action is active as soon as the hotkey is pressed. While active the left, right, up or down keys can be used (these are configured by the actions above).
 ---
 --- A configuration example:
 --- ``` lua
