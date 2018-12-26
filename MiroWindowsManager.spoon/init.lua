@@ -87,6 +87,12 @@ end
 obj.pushToNextScreen = false
 
 
+--- MiroWindowsManager.stickySides
+--- Variable
+--- Boolean value to decide whether or not to stick the window to the edge of the screen if shrinking it would detatch it from the screen edge.
+obj.stickySides = false
+
+
 --- MiroWindowsManager.resizeRate
 --- Variable
 --- Float value to decide the rate at which to resize windows. A value of 1.05 means that the window is made taller/wider (or shorter/thinner) in 5% increments.
@@ -200,6 +206,18 @@ function obj:resize(growth)
     fr[self._growthsRel[growth].dim] + (self._growthsRel[growth].growthSign * growthDiff)
 
   fr = fr:intersect(frontmostScreen():frame())  -- avoid sizing out of bounds
+
+  if self.stickySides then
+    if growth == 'shorter' and self:currentlyBound('up') then
+      fr.y = 0
+    elseif growth == 'shorter' and self:currentlyBound('down') then
+      fr.y = fr.y + growthDiff / 2
+    elseif growth == 'thinner' and self:currentlyBound('left') then
+      fr.x = 0
+    elseif growth == 'thinner' and self:currentlyBound('right') then
+      fr.x = fr.x + growthDiff / 2
+    end
+  end
 
   w:setFrame(fr)
   return self
