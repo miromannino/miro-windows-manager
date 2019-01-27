@@ -87,7 +87,8 @@ Here comments from the users, just as reviews.
 > &mdash; Gaurav
 
 > the only issue I have with miro-windows-manager is the fact that I didn't discover it sooner. just getting into HammerSpoon and love this 🥄 ... so handy, nice work @miromannino !
-> &mdash; [rxng](https://github.com/miromannino/miro-windows-manager/issues/13)
+>
+> &mdash; [zanuka](https://github.com/miromannino/miro-windows-manager/issues/13)
 
 ## Articles
 
