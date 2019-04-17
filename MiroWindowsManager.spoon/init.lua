@@ -69,6 +69,14 @@ obj.sizes = {2, 3, 3/2}
 --- Use 'c' for the original size and shape of the window before starting to move it.
 obj.fullScreenSizes = {1, 2, 'c'}
 
+--- MiroWindowsManager.middleScreenSizes
+--- Variable
+--- The sizes that the window can have.
+--- The sizes are expressed as dividend of the entire screen's horizontal size.
+--- Middle will always be full vertical, unless acted upon by another method, `hyper` + `up` for instance
+--- For example `{1, 4/3, 2}` means that it can be 1/1 (hence full screen), 3/4 and 1/2 of the total screen's size
+obj.middleScreenSizes = {2, 3/2, 4/3}
+
 -- Comment: Lots of work here to save users a little work. Previous versions
 -- required users to call MiroWindowsManager:start() every time they changed
 -- GRID. The metatable work here watches for those changes and does the work
@@ -132,6 +140,7 @@ obj._pressed = {}
 obj._pressTimers = {}
 obj._lastSeq = {}
 obj._lastFullscreenSeq = nil
+obj._lastMiddleSeq = nil
 local function initPressed(move)
   obj._pressed[move] = false
   obj._pressTimers[move] = hs.timer.doAfter(1, function() obj._pressed[move] = false end)
@@ -360,6 +369,27 @@ function obj:fullscreen()
   return self
 end
 
+--- MiroWindowsManager:fullscreen()
+--- Method
+--- Middle, or cycle to next middle option
+---
+--- Parameters:
+---  * None.
+---
+--- Returns:
+---  * The MiroWindowsManager object
+function obj:middle()
+  local seq = self:currentMiddleSeq()  -- current sequence index or 0 if out of sequence
+  logger.i("We're at middle sequence ".. tostring(seq) .." (".. frontmostCell().string ..")")
+
+  seq = seq % #self.middleScreenSizes + 1  -- if seq = #self.middleScreenSizes then 0 so next seq = 1 (we cycle through sizes)
+  logger.i("Updating seq to " .. tostring(seq) .." (size: ".. tostring(self.middleScreenSizes[seq]) ..")")
+
+  self:setToMiddleSeq(seq)  -- next in sequence
+
+  return self
+end
+
 --- MiroWindowsManager:center()
 --- Method
 --- Center
@@ -523,6 +553,61 @@ function obj:getFullscreenCell(seq)
   return self:snap_to_grid(hs.geometry(pnt, size))
 end
 
+-- Query middle sequence - 0 means out of sequence
+function obj:currentMiddleSeq()
+  local cell = frontmostCell()
+
+  -- optimization, most likely the window is at the same place as the last fullscreen seq
+  if self._lastMiddleSeq and  -- if there is a saved last matched seq, and
+      self.middleScreenSizes[self._lastMiddleSeq] and -- it's (still) a valid index to fullScreenSizes
+      cell == self:getMiddleCell(self._lastMiddleSeq) then -- last matched seq is same as the current fullscreen
+    logger.i('last matched seq is same as current cell, so returning seq = ' .. tostring(self._lastMiddleSeq))
+    return self._lastMiddleSeq 
+  else 
+    self._lastMiddleSeq = nil -- cleanup if the last matched seq doesn't match the frontmost
+  end
+
+  -- trying to see which middle size is the current window
+  for i = 1,#self.middleScreenSizes do
+    logger.i('analyze seq = ' .. tostring(i))
+    if cell == self:getMiddleCell(i) then
+      logger.i('cell == self:getMiddleCell(seq)')
+      return i
+    end
+  end
+  -- we cannot find any middle size that match the current window state, so we start with 0
+  return 0
+end
+
+-- Set middle sequence
+function obj:setToMiddleSeq(seq)
+  logger.i('lastMatchedSeq: ' .. tostring(lastMatchedSeq))
+
+  self._setPosition(self:getMiddleCell(seq))
+
+  self._lastFullscreenSeq = seq
+  return self
+end
+
+-- hs.grid cell for middle sequence `seq`
+function obj:getMiddleCell(seq)
+  local seq_factor = self.middleScreenSizes[seq]
+  local pnt, size
+
+  logger.i('window id: ' .. tostring(frontmostWindow():id()))
+
+  size = hs.geometry.size(
+    self.GRID.w / seq_factor,
+    self.GRID.h
+    )
+  pnt = hs.geometry.point(
+    (self.GRID.w - size.w) / 2,
+    (self.GRID.h - self.GRID.h)
+    )
+
+  return self:snap_to_grid(hs.geometry(pnt, size))
+end
+
 -- Set window to cell
 function obj._setPosition(cell)
   local win = frontmostWindow()
@@ -550,6 +635,7 @@ obj.hotkeys = {}
 ---           active as soon as the hotkey is pressed. While active the left, 
 ---           right, up or down keys can be used (these are configured by 
 ---           the actions above). 
+---   * middle: for the middle action (e.g `{hyper, "m"}`)
 ---
 --- A configuration example can be:
 --- ``` lua
@@ -562,6 +648,7 @@ obj.hotkeys = {}
 ---   fullscreen  = {hyper, "f"},
 ---   center      = {hyper, "c"},
 ---   move        = {hyper, "v"}
+---   middle      = {hyper, "m"}
 --- })
 ---
 --- In this example ctrl+alt+cmd+up will perform the 'up' action
@@ -590,6 +677,13 @@ function obj:bindHotkeys(mapping)
         mapping.fullscreen[1], 
         mapping.fullscreen[2],
         function() self:fullscreen() end)
+    end
+
+    if mapping.middle then
+      self.hotkeys[#self.hotkeys + 1] = hs.hotkey.bind(
+        mapping.middle[1], 
+        mapping.middle[2],
+        function() self:middle() end)
     end
 
     if mapping.center then
