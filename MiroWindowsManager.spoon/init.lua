@@ -369,7 +369,7 @@ function obj:fullscreen()
   return self
 end
 
---- MiroWindowsManager:fullscreen()
+--- MiroWindowsManager:middle()
 --- Method
 --- Middle, or cycle to next middle option
 ---
