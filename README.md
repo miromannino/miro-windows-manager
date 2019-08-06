@@ -1,6 +1,6 @@
 # Miro's windows manager
 
-With this script you will be able to move the window in halves and in corners using your keyboard and mainly using arrows. You would also be able to resize them by thirds, quarters, or halves.
+With this Hammerspoon Spoon you will be able to move windows in halves and in corners using your keyboard, mainly using arrows. You will also be able to resize them by thirds, quarters, or halves.
 
 Other projects (e.g. Spectacle) move windows in halves using arrows, and in corners using other counterintuitive shortcuts, like letters, which makes things confusing.
 
@@ -12,19 +12,20 @@ This script needs Hammerspoon in order to work.
 
  - Extract the zip file, containing `MiroWindowsManager.spoon` in `~/.hammerspoon/Spoons`
  - Now you need to configure Hammerspoon in order to load this spoon in `~/.hammerspoon/Spoons/MiroWindowsManager.spoon` adding the following snippet of code in your `init.lua` file:
-```
-local hyper = {"ctrl", "alt", "cmd"}
-
+``` lua
 hs.loadSpoon("MiroWindowsManager")
-
-hs.window.animationDuration = 0.3
+local hyper = {"ctrl", "alt", "cmd"}
 spoon.MiroWindowsManager:bindHotkeys({
-  up = {hyper, "up"},
-  right = {hyper, "right"},
-  down = {hyper, "down"},
-  left = {hyper, "left"},
-  fullscreen = {hyper, "f"}
+  up          = {hyper, "up"},
+  down        = {hyper, "down"},
+  left        = {hyper, "left"},
+  right       = {hyper, "right"},
+  fullscreen  = {hyper, "f"},
+  center      = {hyper, "c"},
+  move        = {hyper, "v"},
+  resize      = {hyper, "d" }
 })
+hs.window.animationDuration = 0.3
 ```
 
 ## Shortcuts
@@ -33,7 +34,7 @@ In the snippet above configure Miro'w Windows Manager in the following way:
 
 ### Hyper key
 
- The hyper key is defined as `ctrl` + `alt` + `cmd`. This means that each shortcut will start by pressing these three keys. If you consider this too verbose for your personal keyboard interactions, you can also change it, for example replacing it with an unused key (e.g. caps lock key) with [Karabiner](https://pqrs.org/osx/karabiner/) and [Seil](https://pqrs.org/osx/karabiner/seil.html.en) to act as hyper key.
+ The hyper key is defined as `ctrl` + `alt` + `cmd`. This means that each shortcut will start by pressing these three keys. If you consider this too verbose for your personal keyboard interactions, you can also change it, for example replacing it with an unused modifier key (e.g. caps lock key with [Karabiner Elements](https://pqrs.org/osx/karabiner/)).
 
 ### Move in halves
 
@@ -70,6 +71,18 @@ Note that in case the window is resized to be a half of the screen, you can also
 
 As the other shortcuts, `hyper` + `f` can be pressed multiple times to obtain a centered window of three fourth and one half of height and width. This behaviour can be customized.
 
+### Center window
+
+ - `hyper` + `c`: center window without changing its size
+
+### Move Mode
+
+ - Press and hold `hyper` + `v`, then tap the move keys to move the window in increments of 5% of the screen size
+
+### Resize Mode
+
+ - Press and hold `hyper` + `d`, then tap the move keys to resize the window in increments of 5% of the screen size.
+
 ## Animations
 
 The snippet above configures the animation to last `0.3s` with `hs.window.animationDuration = 0.3`. To remove the animations completely change this value to `0`.
@@ -85,6 +98,10 @@ Here comments from the users, just as reviews.
 > Really loving the arrow based positioning, thanks for making this ! I can now uninstall “spectacle” which I was using for the same purpose but the key bindings were unintuitive.
 >
 > &mdash; Gaurav
+
+> the only issue I have with miro-windows-manager is the fact that I didn't discover it sooner. just getting into HammerSpoon and love this 🥄 ... so handy, nice work @miromannino !
+>
+> &mdash; [zanuka](https://github.com/miromannino/miro-windows-manager/issues/13)
 
 ## Articles
 
