@@ -78,6 +78,10 @@ The snippet above configures the animation to last `0.3s` with `hs.window.animat
 
 Here comments from the users, just as reviews.
 
+> I can’t thank you enough for you windows management Spoon. It’s *the* best window manager for Mac OS out there.
+>
+> &mdash; Jacopo
+
 > it's something I have been looking for all my life! It is really intuitive and ingenious once you see the magic it can do.
 > 
 > &mdash; [rxng](https://github.com/miromannino/hammerspoon-config/issues/1)
