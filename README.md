@@ -1,8 +1,10 @@
-# Miro's windows manager
+# Miro Windows Manager
 
-With this script you will be able to move the window in halves and in corners using your keyboard and mainly using arrows. You would also be able to resize them by thirds, quarters, or halves.
+With this script you will be able to move windows around your screen by using your keyboard!
 
-Other projects (e.g. Spectacle) move windows in halves using arrows, and in corners using other counterintuitive shortcuts, like letters, which makes things confusing.
+Windows can be resized to full-screen or resized in halves or in corners using your keyboard. 
+
+This can all be done by using a special (i.e. hyper) key in your keyboard and arrows. Other projects instead move windows in halves using arrows, and in corners using other counterintuitive shortcuts, like letters, which makes things confusing.
 
 This script needs Hammerspoon in order to work.
 
