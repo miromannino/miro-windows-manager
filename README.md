@@ -96,6 +96,10 @@ Here comments from the users, just as reviews.
 >
 > &mdash; [zanuka](https://github.com/miromannino/miro-windows-manager/issues/13)
 
+> I've been using Hammerspoon for years with my own simple window management bindings. For most of that time I've been meaning to spend the effort to improve them to enable e.g. cycling through sizes and easier corner management. In a fit of procrastination I decided that today's the day to build that setup. But after a quick search and finding this package, it took me all of 5 minutes to rip out my config and replace it with this, and procrastination avoided!
+>Well done, very much appreciated!
+> &mdash; [bennettrogers](https://github.com/miromannino/miro-windows-manager/issues/20#issuecomment-935631702)
+
 ## Articles
 
 A suggested tutorial on Mic Sumner: https://www.micsumner.com/how-to-organise-window-viewing-areas-in-mac-os/
