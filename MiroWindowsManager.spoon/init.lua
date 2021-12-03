@@ -138,6 +138,14 @@ function obj:_fullDimension(dim)
   end
 end
 
+function obj:_positionAndResizeScreen(x, y, w, h, label)
+  if hs.window.focusedWindow() then
+    local win = hs.window.frontmostWindow()
+    hs.alert(label)
+    win:setFrame({x=x, y=y, w=w, h=h})
+  end
+end
+
 --- MiroWindowsManager:bindHotkeys()
 --- Method
 --- Binds hotkeys for Miro's Windows Manager
@@ -223,6 +231,14 @@ function obj:bindHotkeys(mapping)
   hs.hotkey.bind(mapping.fullscreen[1], mapping.fullscreen[2], function ()
     self:_nextFullScreenStep()
   end)
+
+  if mapping.custom then
+    for i,v in pairs(mapping.custom) do
+      hs.hotkey.bind(v[1], v[2], function ()
+        self:_positionAndResizeScreen(v[3], v[4], v[5], v[6], v[7])
+      end)
+    end
+  end
 
 end
 

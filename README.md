@@ -25,7 +25,12 @@ spoon.MiroWindowsManager:bindHotkeys({
   right = {hyper, "right"},
   down = {hyper, "down"},
   left = {hyper, "left"},
-  fullscreen = {hyper, "f"}
+  fullscreen = {hyper, "f"},
+  custom = {
+    {hyper, "1", 0, 0, 375, 667, "iPhone 6/6s (375 x 667)"},
+    {hyper, "2", 0, 0, 1024, 768, "1024 x 768"},
+    {hyper, "3", 0, 0, 1280, 720, "1280 x 720"}
+  }
 })
 ```
 
