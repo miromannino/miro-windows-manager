@@ -120,6 +120,16 @@ function obj:_nextFullScreenStep()
   end
 end
 
+function obj:_moveNextScreenStep()
+  if hs.window.focusedWindow() then
+    local win = hs.window.frontmostWindow()
+    local id = win:id()
+    local screen = win:screen()
+
+    win:move(win:frame():toUnitRect(screen:frame()), screen:next(), true, 0)
+  end
+end
+
 function obj:_fullDimension(dim)
   if hs.window.focusedWindow() then
     local win = hs.window.frontmostWindow()
@@ -148,6 +158,7 @@ end
 ---   * down: for the down action (usually {hyper, "down"})
 ---   * left: for the left action (usually {hyper, "left"})
 ---   * fullscreen: for the full-screen action (e.g. {hyper, "f"})
+---   * nextscreen: for the multi monitor next screen action (e.g. {hyper, "n"})
 ---
 --- A configuration example can be:
 --- ```
@@ -158,6 +169,7 @@ end
 ---   down = {hyper, "down"},
 ---   left = {hyper, "left"},
 ---   fullscreen = {hyper, "f"}
+---   nextscreen = {hyper, "n"}
 --- })
 --- ```
 function obj:bindHotkeys(mapping)
@@ -222,6 +234,10 @@ function obj:bindHotkeys(mapping)
 
   hs.hotkey.bind(mapping.fullscreen[1], mapping.fullscreen[2], function ()
     self:_nextFullScreenStep()
+  end)
+
+  hs.hotkey.bind(mapping.nextscreen[1], mapping.nextscreen[2], function ()
+    self:_moveNextScreenStep()
   end)
 
 end

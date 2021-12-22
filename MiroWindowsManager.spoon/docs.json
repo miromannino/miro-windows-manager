@@ -90,7 +90,7 @@
     "doc" : "With this script you will be able to move the window in halves and in corners using your keyboard and mainly using arrows. You would also be able to resize them by thirds, quarters, or halves.\n\nOfficial homepage for more info and documentation: [https:\/\/github.com\/miromannino\/miro-windows-manager](https:\/\/github.com\/miromannino\/miro-windows-manager)\n\nDownload: [https:\/\/github.com\/miromannino\/miro-windows-manager\/raw\/master\/MiroWindowsManager.spoon.zip](https:\/\/github.com\/miromannino\/miro-windows-manager\/raw\/master\/MiroWindowsManager.spoon.zip)",
     "Method" : [
       {
-        "doc" : "Binds hotkeys for Miro's Windows Manager\nParameters:\n * mapping - A table containing hotkey details for the following items:\n  * up: for the up action (usually {hyper, \"up\"})\n  * right: for the right action (usually {hyper, \"right\"})\n  * down: for the down action (usually {hyper, \"down\"})\n  * left: for the left action (usually {hyper, \"left\"})\n  * fullscreen: for the full-screen action (e.g. {hyper, \"f\"})\n\nA configuration example can be:\n```\nlocal hyper = {\"ctrl\", \"alt\", \"cmd\"}\nspoon.MiroWindowsManager:bindHotkeys({\n  up = {hyper, \"up\"},\n  right = {hyper, \"right\"},\n  down = {hyper, \"down\"},\n  left = {hyper, \"left\"},\n  fullscreen = {hyper, \"f\"}\n})\n```",
+        "doc" : "Binds hotkeys for Miro's Windows Manager\nParameters:\n * mapping - A table containing hotkey details for the following items:\n  * up: for the up action (usually {hyper, \"up\"})\n  * right: for the right action (usually {hyper, \"right\"})\n  * down: for the down action (usually {hyper, \"down\"})\n  * left: for the left action (usually {hyper, \"left\"})\n  * fullscreen: for the full-screen action (e.g. {hyper, \"f\"})\n  * nextscreen: for multi monitor the next screen action (usually {hyper, \"n\"})\n\nA configuration example can be:\n```\nlocal hyper = {\"ctrl\", \"alt\", \"cmd\"}\nspoon.MiroWindowsManager:bindHotkeys({\n  up = {hyper, \"up\"},\n  right = {hyper, \"right\"},\n  down = {hyper, \"down\"},\n  left = {hyper, \"left\"},\n  fullscreen = {hyper, \"f\"},\n  nextscreen = {hyper, \"n\"}\n})\n```",
         "name" : "bindHotkeys",
         "stripped_doc" : [
           "Binds hotkeys for Miro's Windows Manager"
@@ -102,6 +102,7 @@
           "  * down: for the down action (usually {hyper, \"down\"})",
           "  * left: for the left action (usually {hyper, \"left\"})",
           "  * fullscreen: for the full-screen action (e.g. {hyper, \"f\"})",
+          "  * nextscreen: for multi monitor the next screen action (e.g. {hyper, \"n\"})",
           "",
           "A configuration example can be:",
           "```",
@@ -112,6 +113,7 @@
           "  down = {hyper, \"down\"},",
           "  left = {hyper, \"left\"},",
           "  fullscreen = {hyper, \"f\"}",
+          "  nextscreen = {hyper, \"n\"}",
           "})",
           "```"
         ],
@@ -209,6 +211,7 @@
           "  * down: for the down action (usually {hyper, \"down\"})",
           "  * left: for the left action (usually {hyper, \"left\"})",
           "  * fullscreen: for the full-screen action (e.g. {hyper, \"f\"})",
+          "  * nextscreen: for multi monitor the next screen action (e.g. {hyper, \"n\"})",
           "",
           "A configuration example can be:",
           "```",
@@ -219,6 +222,7 @@
           "  down = {hyper, \"down\"},",
           "  left = {hyper, \"left\"},",
           "  fullscreen = {hyper, \"f\"}",
+          "  nextscreen = {hyper, \"n\"}",
           "})",
           "```"
         ],
