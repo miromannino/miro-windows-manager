@@ -23,7 +23,10 @@ spoon.MiroWindowsManager:bindHotkeys({
   right = {hyper, "right"},
   down = {hyper, "down"},
   left = {hyper, "left"},
-  fullscreen = {hyper, "f"}
+  fullscreen = {hyper, "f"},
+  center = {hyper, "c"},
+  move = {hyper, "v"},  
+  middle = {hyper, "m"}
 })
 ```
 
@@ -69,6 +72,12 @@ These are useful in case the window is in one of the corners.
 Note that in case the window is resized to be a half of the screen, you can also use `hyper` + `up` + `down` (or `hyper` + `right` + `left`) to resize the window full screen.
 
 As the other shortcuts, `hyper` + `f` can be pressed multiple times to obtain a centered window of three fourth and one half of height and width. This behaviour can be customized.
+
+### Move to the middle, expanding to full height.
+
+- `hyper` + `m`: move to the middle
+
+This will move the window to the center and initially use half the screen width and full height; additional calls to `hyper` + `m` will use two thirds and three quarters of the screen width.
 
 ## Animations
 
