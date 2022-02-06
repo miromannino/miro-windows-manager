@@ -10,6 +10,7 @@ This script needs Hammerspoon in order to work.
 
 ## How to install
 
+ - Download the zip file for the latest release from https://github.com/miromannino/miro-windows-manager/releases
  - Extract the zip file, containing `MiroWindowsManager.spoon` in `~/.hammerspoon/Spoons`
  - Now you need to configure Hammerspoon in order to load this spoon in `~/.hammerspoon/Spoons/MiroWindowsManager.spoon` adding the following snippet of code in your `init.lua` file:
 ```
