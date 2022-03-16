@@ -2,7 +2,7 @@
 
 With this script you will be able to move windows around your screen by using your keyboard!
 
-Windows can be resized to full-screen or resized in halves or in corners using your keyboard. 
+Windows can be resized to full-screen, resized in halves or in corners or moved to other screens in case of multiple monitors using your keyboard. 
 
 This can all be done by using a special (i.e. hyper) key in your keyboard and arrows. Other projects instead move windows in halves using arrows, and in corners using other counterintuitive shortcuts, like letters, which makes things confusing.
 
@@ -26,6 +26,7 @@ spoon.MiroWindowsManager:bindHotkeys({
   down = {hyper, "down"},
   left = {hyper, "left"},
   fullscreen = {hyper, "f"},
+  nextscreen = {hyper, "n"},
   custom = {
     {hyper, "1", 0, 0, 375, 667, "iPhone 6/6s (375 x 667)"},
     {hyper, "2", 0, 0, 1024, 768, "1024 x 768"},
@@ -36,7 +37,7 @@ spoon.MiroWindowsManager:bindHotkeys({
 
 ## Shortcuts
 
-In the snippet above configure Miro'w Windows Manager in the following way:
+In the snippet above configure Miro's Windows Manager in the following way:
 
 ### Hyper key
 
@@ -76,6 +77,12 @@ These are useful in case the window is in one of the corners.
 Note that in case the window is resized to be a half of the screen, you can also use `hyper` + `up` + `down` (or `hyper` + `right` + `left`) to resize the window full screen.
 
 As the other shortcuts, `hyper` + `f` can be pressed multiple times to obtain a centered window of three fourth and one half of height and width. This behaviour can be customized.
+
+### Move to other display
+
+ - `hyper` + `n`: move to other monitor.
+
+ Hitting that shortcut multiple times will rotate between the number of monitors
 
 ## Animations
 
