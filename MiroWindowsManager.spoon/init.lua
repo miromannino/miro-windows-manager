@@ -126,7 +126,7 @@ function obj:_moveNextScreenStep()
     local id = win:id()
     local screen = win:screen()
 
-    win:move(win:frame():toUnitRect(screen:frame()), screen:next(), true, 0)
+    win:move(win:frame():toUnitRect(screen:frame()), screen:next(), true)
   end
 end
 
