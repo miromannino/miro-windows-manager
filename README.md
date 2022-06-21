@@ -26,7 +26,8 @@ spoon.MiroWindowsManager:bindHotkeys({
   down = {hyper, "down"},
   left = {hyper, "left"},
   fullscreen = {hyper, "f"},
-  nextscreen = {hyper, "n"}
+  nextscreen = {hyper, "n"},
+  previousscreen = {hyper, "p"}
 })
 ```
 
@@ -75,9 +76,10 @@ As the other shortcuts, `hyper` + `f` can be pressed multiple times to obtain a 
 
 ### Move to other display
 
- - `hyper` + `n`: move to other monitor.
+ - `hyper` + `n`: move to next monitor.
+ - `hyper` + `p`: move to previous monitor.
 
- Hitting that shortcut multiple times will rotate between the number of monitors
+ Hitting the shortcuts multiple times will rotate between the number of monitors
 
 ## Animations
 

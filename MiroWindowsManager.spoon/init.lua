@@ -120,13 +120,17 @@ function obj:_nextFullScreenStep()
   end
 end
 
-function obj:_moveNextScreenStep()
+function obj:_moveScreenStep(direction)
   if hs.window.focusedWindow() then
     local win = hs.window.frontmostWindow()
     local id = win:id()
     local screen = win:screen()
-
-    win:move(win:frame():toUnitRect(screen:frame()), screen:next(), true, 0)
+    
+    if (direction == "next") then
+      win:move(win:frame():toUnitRect(screen:frame()), screen:next(), true)
+    elseif (direction == "previous") then
+      win:move(win:frame():toUnitRect(screen:frame()), screen:previous(), true)
+    end
   end
 end
 
@@ -237,7 +241,11 @@ function obj:bindHotkeys(mapping)
   end)
 
   hs.hotkey.bind(mapping.nextscreen[1], mapping.nextscreen[2], function ()
-    self:_moveNextScreenStep()
+    self:_moveScreenStep("next")
+  end)
+
+  hs.hotkey.bind(mapping.previousscreen[1], mapping.previousscreen[2], function ()
+    self:_moveScreenStep("previous")
   end)
 
 end
