@@ -132,11 +132,14 @@ end
 function obj:_moveNextScreenStep()
   if hs.window.focusedWindow() then
     local win = hs.window.frontmostWindow()
-    self:_exitFullScreen(win)
     local id = win:id()
     local screen = win:screen()
-
-    win:move(win:frame():toUnitRect(screen:frame()), screen:next(), true, 0)
+    if win:isFullScreen() then
+      win:setFullScreen(false)
+      win:move(win:frame():toUnitRect(screen:frame()), screen:next(), true, 1)
+    else
+      win:move(win:frame():toUnitRect(screen:frame()), screen:next(), true, 0)
+    end
   end
 end
 
